@@ -1,0 +1,5 @@
+{
+	"mongoURI": "mongodb://localhost/fbm",
+	"_mongoURI": "mongodb+srv://admin:admin@123@cluster0.oni48.mongodb.net/fbm",
+	"jwtSecret": "sl_huy1"
+}
