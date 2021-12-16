@@ -11,14 +11,10 @@ app.use(express.json())
 // DB Config
 const db = config.get('mongoURI')
 
-// Connect to Mongo
-mongoose
-	.connect(db, {
-		useNewUrlParser: true,
-		useCreateIndex: true,
-	})
-	.then(() => console.log('MongoDB Connected'))
-	.catch((err) => console.log(err))
+mongoose.connect(db, (err) => {
+	if (err) throw err
+	console.log('Connected to mongodb')
+})
 
 // Use Routes
 app.use('/api/items', require('./routes/api/items'))
@@ -29,7 +25,7 @@ app.use('/api/taikhoan', require('./routes/api/taikhoan/taikhoan'))
 // var runnaptien = require('./cron_data/runnaptien');
 var runmuasanpham = require('./cron_data/runmuasanpham')
 runmuasanpham()
-cron.schedule('* * * * *', () => {
+cron.schedule('* * * * * *', () => {
 	try {
 		// runnaptien();
 	} catch (e) {
