@@ -7,17 +7,27 @@ const app = express()
 
 // Bodyparser Middleware
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // DB Config
 const db = config.get('mongoURI')
 
-mongoose.connect(db, (err) => {
-	if (err) throw err
-	console.log('Connected to mongodb')
-})
+mongoose.connect(
+	db,
+	{
+		useCreateIndex: true,
+		useFindAndModify: false,
+		useUnifiedTopology: true,
+		useNewUrlParser: true,
+	},
+	(err) => {
+		if (err) throw err
+		console.log('Connected to mongodb')
+	}
+)
 
 // Use Routes
-app.use('/api/items', require('./routes/api/items'))
+app.use('/api/items', require('./routes/api/items')) // Ko sử dụng
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/fbmark', require('./routes/api/fbmark/actions'))

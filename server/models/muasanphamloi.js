@@ -1,28 +1,31 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// Create Schema
+// Create Schema MuaSanPhamLoi
 const MuaSanPhamLoiSchema = new Schema({
-	id_user :{
+	id_user: {
 		type: String,
-		default: null
+		default: null,
 	},
 	data: {
 		type: Object,
-		default: null
+		default: null,
 	},
-	status :{
+	status: {
 		type: Number,
-		default: 0
+		default: 0,
 	},
 	msg: {
 		type: Object,
-		default: null
+		default: null,
 	},
 	date: {
 		type: Date,
-		default: Date.now
-	}
-});
+		default: Date.now,
+	},
+})
 
-module.exports = MuaSanPhamLoi = mongoose.model('MuaSanPhamLoi', MuaSanPhamLoiSchema);
+module.exports = MuaSanPhamLoi = mongoose.model(
+	'MuaSanPhamLoi',
+	MuaSanPhamLoiSchema
+)

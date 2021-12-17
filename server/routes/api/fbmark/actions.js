@@ -22,7 +22,7 @@ var options = {
 	mode: CryptoJS.mode.CBC,
 	padding: CryptoJS.pad.Pkcs7,
 }
-// xu ly product
+// xu ly product (query=daban or chuaban => Admin show account fb)
 router.get('/product', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
@@ -157,6 +157,7 @@ router.get('/thongtingiaodich', auth, (req, res) => {
 	}
 })
 
+// Add product
 router.post('/addproduct', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
@@ -216,6 +217,7 @@ router.post('/addproduct', auth, (req, res) => {
 	}
 })
 
+// Change status account
 router.post('/editstatusproduct', auth, (req, res) => {
 	try {
 		if (!isNumber(req.body.status_product)) {
@@ -260,6 +262,7 @@ router.post('/editstatusproduct', auth, (req, res) => {
 	}
 })
 
+// Xóa account
 router.post('/deleteproduct', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
@@ -348,6 +351,7 @@ router.post('/downloadproduct', auth, (req, res) => {
 	}
 })
 
+// Xem sản phẩm => Lịch sử mua
 router.post('/viewproduct', auth, (req, res) => {
 	try {
 		Product.find({ _id: { $in: req.body.ids }, id_user_buy: req.user.id })
@@ -639,6 +643,7 @@ router.get('/categoryproduct', (req, res) => {
 
 							type: categoryproduct[i].type,
 							country: categoryproduct[i].country,
+							icon: categoryproduct[i].icon,
 
 							date: categoryproduct[i].date,
 							__v: categoryproduct[i].__v,
@@ -656,6 +661,7 @@ router.get('/categoryproduct', (req, res) => {
 	}
 })
 
+// Thêm category product mới
 router.post('/addcategoryproduct', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
@@ -696,6 +702,13 @@ router.post('/addcategoryproduct', auth, (req, res) => {
 						})
 					}
 
+					if (req.body.icon == '' || req.body.icon == null) {
+						return res.send({
+							error: 400,
+							msg: 'Icon không được để trống!',
+						})
+					}
+
 					if (req.body.id_category === '') {
 						const newCategoryProduct = new CategoryProduct({
 							name: req.body.name,
@@ -703,6 +716,7 @@ router.post('/addcategoryproduct', auth, (req, res) => {
 							description: req.body.description,
 							type: req.body.type,
 							country: req.body.country,
+							icon: req.body.icon,
 						})
 						newCategoryProduct.save().then((setting) => {
 							res.json({
@@ -717,6 +731,7 @@ router.post('/addcategoryproduct', auth, (req, res) => {
 							description: req.body.description,
 							type: req.body.type,
 							country: req.body.country,
+							icon: req.body.icon,
 						}
 						var query = { _id: req.body.id_category }
 						CategoryProduct.findOneAndUpdate(

@@ -13,6 +13,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator'
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
 import { Modal, ModalBody } from 'reactstrap'
 import countryList from '../../config/country'
+import iconList from '../../config/icon'
+
 const myNewTheme = {
 	headCells: {
 		style: {
@@ -28,6 +30,7 @@ class LoaiSanPham extends Component {
 		price_category: 0,
 		type_category: 'BM',
 		country_category: 'vn',
+		icon_category: 'vn',
 		description_category: '',
 		id_category: '',
 		deletearr: [],
@@ -48,6 +51,7 @@ class LoaiSanPham extends Component {
 			price_category: 0,
 			type_category: 'BM',
 			country_category: 'vn',
+			icon_category: 'vn',
 			description_category: '',
 			id_category: '',
 			deletearr: [],
@@ -71,6 +75,7 @@ class LoaiSanPham extends Component {
 			price: parseInt(this.state.price_category),
 			type: this.state.type_category,
 			country: this.state.country_category,
+			icon: this.state.icon_category,
 			id_category: this.state.id_category,
 		}
 		this.setState({ isModalBrowseGroupsOpen: false })
@@ -89,6 +94,7 @@ class LoaiSanPham extends Component {
 					price_category: value.price,
 					type_category: value.type,
 					country_category: value.country,
+					icon_category: value.icon,
 					id_category: id,
 				})
 			}
@@ -205,6 +211,11 @@ class LoaiSanPham extends Component {
 			{
 				text: 'Tên',
 				dataField: 'name',
+				formatter: (cell, row, rowIndex) => (
+					<>
+						{row.icon} {row.name}
+					</>
+				),
 			},
 			{
 				text: 'Thể loại',
@@ -215,12 +226,36 @@ class LoaiSanPham extends Component {
 				dataField: 'country',
 			},
 			{
-				text: 'Miêu tả',
-				dataField: 'description',
-				formatter: (cell, row, rowIndex) => (
-					<Fragment>{row.description.slice(0, 30)}</Fragment>
-				),
+				text: 'Icon',
+				dataField: 'icon',
+				formatter: (cell, row, rowIndex) => {
+					let index = 0
+					for (let i = 0; i < iconList.length; i++) {
+						if (iconList.code === row.icon) {
+							index = i
+							break
+						}
+					}
+					return (
+						<>
+							{row.icon ? (
+								<img
+									style={{ width: 30 }}
+									src={iconList[index].image}
+									alt='logo'
+								/>
+							) : null}
+						</>
+					)
+				},
 			},
+			// {
+			// 	text: 'Miêu tả',
+			// 	dataField: 'description',
+			// 	formatter: (cell, row, rowIndex) => (
+			// 		<Fragment>{row.description.slice(0, 30)}</Fragment>
+			// 	),
+			// },
 			{
 				text: 'Giá',
 				dataField: 'price',
@@ -390,6 +425,9 @@ class LoaiSanPham extends Component {
 												>
 													{countryList.map(
 														(item, i) => {
+															console.log(
+																item.name
+															)
 															return (
 																<option
 																	key={i}
@@ -402,6 +440,33 @@ class LoaiSanPham extends Component {
 															)
 														}
 													)}
+												</select>
+											</div>
+											<div className='form-group'>
+												<label for='icon_category'>
+													Icon
+												</label>
+												<select
+													className='form-control'
+													id='icon_category'
+													name='icon_category'
+													value={
+														this.state.icon_category
+													}
+													onChange={this.onChange}
+												>
+													{iconList.map((item, i) => {
+														return (
+															<option
+																key={i}
+																value={
+																	item.code
+																}
+															>
+																{item.name}
+															</option>
+														)
+													})}
 												</select>
 											</div>
 											<div className='form-group'>

@@ -1,36 +1,39 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// Create Schema
+// Create Schema LichSuNapTien
 const LichSuNapTienSchema = new Schema({
 	id_user: {
 		type: String,
-		default: null
+		default: null,
 	},
 	ma_nap: {
 		type: String,
-		default: null
+		default: null,
 	},
-	name_user:{
+	name_user: {
 		type: String,
-		default: null
+		default: null,
 	},
 	noidung: {
 		type: String,
-		default: null
+		default: null,
 	},
 	tien_nap: {
 		type: Number,
-		default: null
+		default: null,
 	},
 	seen: {
 		type: Number,
-		default: 0
+		default: 0,
 	},
 	thoigian_nap: {
 		type: Date,
-		default: Date.now
-	}
-});
+		default: Date.now,
+	},
+})
 
-module.exports = LichSuNapTien = mongoose.model('lichsunaptien', LichSuNapTienSchema);
+module.exports = LichSuNapTien = mongoose.model(
+	'lichsunaptien',
+	LichSuNapTienSchema
+)

@@ -22,7 +22,9 @@ const CategoryProductSchema = new Schema({
 	},
 	country: {
 		type: String,
-		required: true,
+	},
+	icon: {
+		type: String,
 	},
 	date: {
 		type: Date,
