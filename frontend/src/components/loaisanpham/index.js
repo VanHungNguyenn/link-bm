@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Link } from 'react-router-dom'
+
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import DataTable from 'react-data-table-component'
+
 import BootstrapTable from 'react-bootstrap-table-next'
 import Swal from 'sweetalert2'
 import {
@@ -10,19 +9,11 @@ import {
 	deleteCategoryProduct,
 } from '../../actions/itemActions'
 import paginationFactory from 'react-bootstrap-table2-paginator'
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+
 import { Modal, ModalBody } from 'reactstrap'
 import countryList from '../../config/country'
 import iconList from '../../config/icon'
 
-const myNewTheme = {
-	headCells: {
-		style: {
-			fontWeight: 'bold',
-			fontSize: '14px',
-		},
-	},
-}
 class LoaiSanPham extends Component {
 	state = {
 		isModalBrowseGroupsOpen: false,
@@ -211,11 +202,27 @@ class LoaiSanPham extends Component {
 			{
 				text: 'Tên',
 				dataField: 'name',
-				formatter: (cell, row, rowIndex) => (
-					<>
-						{row.icon} {row.name}
-					</>
-				),
+				formatter: (cell, row, rowIndex) => {
+					let index = 0
+					for (let i = 0; i < iconList.length; i++) {
+						if (iconList[i].code === row.icon) {
+							index = i
+							break
+						}
+					}
+					return (
+						<>
+							{row.icon ? (
+								<img
+									style={{ width: 25 }}
+									src={iconList[index].image}
+									alt='logo'
+								/>
+							) : null}{' '}
+							{row.name}
+						</>
+					)
+				},
 			},
 			{
 				text: 'Thể loại',
@@ -224,6 +231,27 @@ class LoaiSanPham extends Component {
 			{
 				text: 'Quốc gia',
 				dataField: 'country',
+				formatter: (cell, row, rowIndex) => {
+					let index = 0
+					for (let i = 0; i < countryList.length; i++) {
+						console.log()
+						if (countryList[i].code === row.country) {
+							index = i
+							break
+						}
+					}
+					return (
+						<>
+							{row.country ? (
+								<img
+									style={{ width: 30 }}
+									src={countryList[index].image}
+									alt='logo'
+								/>
+							) : null}
+						</>
+					)
+				},
 			},
 			{
 				text: 'Icon',
@@ -231,7 +259,7 @@ class LoaiSanPham extends Component {
 				formatter: (cell, row, rowIndex) => {
 					let index = 0
 					for (let i = 0; i < iconList.length; i++) {
-						if (iconList.code === row.icon) {
+						if (iconList[i].code === row.icon) {
 							index = i
 							break
 						}

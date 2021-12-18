@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Link } from 'react-router-dom'
+
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+
 class NapTien extends Component {
 	state = {
 		copySuccessNapTienVCB: false,
@@ -46,6 +46,7 @@ class NapTien extends Component {
 									<img
 										src='/vietcombank-logo.jpg'
 										style={{ width: '30%' }}
+										alt=''
 									/>
 									<div className='pt-2'>
 										<p>
@@ -134,6 +135,7 @@ class NapTien extends Component {
 									<img
 										src='/momo.png'
 										style={{ width: '30%' }}
+										alt=''
 									/>
 									<div className='pt-2'>
 										<p>

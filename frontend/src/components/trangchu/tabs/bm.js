@@ -1,17 +1,111 @@
 import React, { Component, Fragment } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
 	getProductByCategoryClient,
 	muaTaikhoan,
+	laylichsumuauser,
+	laylichsunapuser,
 } from '../../../actions/itemActions'
 import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2'
 import { FireOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import iconList from '../../../config/icon'
+
+const humanized_time_span = (date, ref_date, date_formats, time_units) => {
+	//Date Formats must be be ordered smallest -> largest and must end in a format with ceiling of null
+	date_formats = date_formats || {
+		past: [
+			{ ceiling: 60, text: '$seconds giấy trước' },
+			{ ceiling: 3600, text: '$minutes phút trước' },
+			{ ceiling: 86400, text: '$hours giờ trước' },
+			{ ceiling: 2629744, text: '$days ngày trước' },
+			{ ceiling: 31556926, text: '$months tháng trước' },
+			{ ceiling: null, text: '$years năm trước' },
+		],
+		future: [
+			{ ceiling: 60, text: 'trước $seconds giây' },
+			{ ceiling: 3600, text: 'trước $minutes phút' },
+			{ ceiling: 86400, text: 'trước $hours giờ' },
+			{ ceiling: 2629744, text: 'trước $days ngày' },
+			{ ceiling: 31556926, text: 'trước $months tháng' },
+			{ ceiling: null, text: 'trước $years năm' },
+		],
+	}
+	//Time units must be be ordered largest -> smallest
+	time_units = time_units || [
+		[31556926, 'năm'],
+		[2629744, 'tháng'],
+		[86400, 'ngày'],
+		[3600, 'giờ'],
+		[60, 'phút'],
+		[1, 'giây'],
+	]
+
+	date = new Date(date)
+	ref_date = ref_date ? new Date(ref_date) : new Date()
+	var seconds_difference = (ref_date - date) / 1000
+
+	var tense = 'past'
+	if (seconds_difference < 0) {
+		tense = 'future'
+		seconds_difference = 0 - seconds_difference
+	}
+
+	function get_format() {
+		for (var i = 0; i < date_formats[tense].length; i++) {
+			if (
+				date_formats[tense][i].ceiling == null ||
+				seconds_difference <= date_formats[tense][i].ceiling
+			) {
+				return date_formats[tense][i]
+			}
+		}
+		return null
+	}
+
+	function get_time_breakdown() {
+		var seconds = seconds_difference
+		var breakdown = {}
+		for (var i = 0; i < time_units.length; i++) {
+			var occurences_of_unit = Math.floor(seconds / time_units[i][0])
+			seconds = seconds - time_units[i][0] * occurences_of_unit
+			breakdown[time_units[i][1]] = occurences_of_unit
+		}
+		return breakdown
+	}
+
+	function render_date(date_format) {
+		var breakdown = get_time_breakdown()
+		var time_ago_text = date_format.text.replace(/\$(\w+)/g, function () {
+			return breakdown[arguments[1]]
+		})
+		return depluralize_time_ago_text(time_ago_text, breakdown)
+	}
+
+	function depluralize_time_ago_text(time_ago_text, breakdown) {
+		for (var i in breakdown) {
+			if (breakdown[i] == 1) {
+				var regexp = new RegExp('\\b' + i + '\\b')
+				time_ago_text = time_ago_text.replace(regexp, function () {
+					return arguments[0].replace(/s\b/g, '')
+				})
+			}
+		}
+		return time_ago_text
+	}
+
+	return render_date(get_format())
+}
 
 class Bm extends Component {
 	state = {}
+
+	componentDidMount() {
+		this.props.laylichsumuauser()
+		this.props.laylichsunapuser()
+	}
+
 	onChange = (e) => {
 		this.setState({
 			[e.target.name]: e.target.value,
@@ -110,33 +204,32 @@ class Bm extends Component {
 			console.log(e)
 		}
 	}
+
 	render() {
 		var bmlist = this.props.item.items
+		const { userlogs, userdeposit } = this.props.item
+
 		var that = this
-
-		// const listbm = <h1>Hello</h1>
-
-		// const listvia = <h1>Hello</h1>
 
 		const listbm = (
 			<>
 				<div className='table-responsive'>
-					<table class='table table-striped table-bordered table-hover table-sm'>
-						<thead class='thead-light'>
+					<table className='table table-striped table-bordered table-hover table-sm'>
+						<thead className='thead-light'>
 							<tr>
-								<th scope='col'>Name</th>
+								<th scope='col'>Tên sản phẩm</th>
 
 								<th scope='col' style={{ width: 80 }}>
-									Country
+									Quốc gia
 								</th>
 								<th scope='col' style={{ width: 100 }}>
-									Available
+									Hiện có
 								</th>
 								<th scope='col' style={{ width: 80 }}>
-									Price
+									Đơn giá
 								</th>
 								<th scope='col' style={{ width: 100 }}>
-									Quantity
+									Số lượng
 								</th>
 								<th
 									scope='col'
@@ -152,85 +245,91 @@ class Bm extends Component {
 								if (value.type == 'BM') {
 									var name_input_soluongmua =
 										'soluongmua_' + index
-									return (
-										<>
-											<tr>
-												<th scope='row'>
-													{value.name}
-												</th>
-												{/* <td>{value.type}</td> */}
-												{/* <td>{value.country}</td> */}
-												<td>
-													<span
-														class={`flag-icon flag-icon-${value.country}`}
-													></span>
-												</td>
 
-												<td className='text-danger'>
-													{value.live_count}
-												</td>
-												<td style={{ color: 'blue' }}>
-													{that.formatMoney(
-														value.price
-													)}
-													đ{' '}
-												</td>
-												<td>
-													{that.props.auth.user !=
-													null ? (
-														<input
-															type='number'
-															className='form-control'
-															name={
-																name_input_soluongmua
-															}
-															value={
-																that.state[
-																	name_input_soluongmua
-																]
-															}
-															onChange={
-																that.onChange
-															}
-														/>
-													) : (
-														''
-													)}
-												</td>
-												<td>
-													{that.props.auth.user !=
-													null ? (
-														<button
-															className='btn btn-primary btn-nw'
-															onClick={() => {
-																that.buyNow(
-																	name_input_soluongmua,
-																	value.price,
-																	value.live_count,
-																	value._id,
-																	value.name,
-																	value.description
+									return (
+										<tr>
+											<th scope='row'>
+												{value.icon ? (
+													<img
+														style={{
+															width: 20,
+														}}
+														src={
+															iconList[
+																renderIcon(
+																	value.icon
 																)
+															].image
+														}
+														alt='logo'
+													/>
+												) : null}{' '}
+												{value.name}
+											</th>
+											<td>
+												<span
+													className={`flag-icon flag-icon-${value.country}`}
+												></span>
+											</td>
+											<td className='text-danger'>
+												{value.live_count}
+											</td>
+											<td style={{ color: 'blue' }}>
+												{that.formatMoney(value.price)}đ{' '}
+											</td>
+											<td>
+												{that.props.auth.user !=
+												null ? (
+													<input
+														type='number'
+														className='form-control'
+														name={
+															name_input_soluongmua
+														}
+														value={
+															that.state[
+																name_input_soluongmua
+															]
+														}
+														onChange={that.onChange}
+													/>
+												) : (
+													''
+												)}
+											</td>
+											<td>
+												{that.props.auth.user !=
+												null ? (
+													<button
+														className='btn btn-primary btn-nw'
+														onClick={() => {
+															that.buyNow(
+																name_input_soluongmua,
+																value.price,
+																value.live_count,
+																value._id,
+																value.name,
+																value.description
+															)
+														}}
+													>
+														<ShoppingCartOutlined
+															style={{
+																'font-size':
+																	'16px',
+																verticalAlign:
+																	'0.125em',
 															}}
-														>
-															<ShoppingCartOutlined
-																style={{
-																	'font-size':
-																		'16px',
-																	verticalAlign:
-																		'0.125em',
-																}}
-															/>{' '}
-															Mua
-														</button>
-													) : (
-														<span className='text-danger font-bold'>
-															Đăng nhập để mua
-														</span>
-													)}
-												</td>
-											</tr>
-										</>
+														/>{' '}
+														Mua
+													</button>
+												) : (
+													<span className='text-danger font-bold'>
+														Đăng nhập để mua
+													</span>
+												)}
+											</td>
+										</tr>
 									)
 								} else {
 									return ''
@@ -241,27 +340,28 @@ class Bm extends Component {
 				</div>
 			</>
 		)
+
 		const listvia = (
 			<>
 				<div className='table-responsive'>
-					<table class='table table-striped table-bordered table-hover table-sm'>
-						<thead class='thead-light'>
+					<table className='table table-striped table-bordered table-hover table-sm'>
+						<thead className='thead-light'>
 							<tr>
-								<th scope='col'>Name</th>
+								<th scope='col'>Tên sản phẩm</th>
 								{/* <th scope='col' style={{ width: 80 }}>
 									Type
 								</th> */}
 								<th scope='col' style={{ width: 80 }}>
-									Country
+									Quốc gia
 								</th>
 								<th scope='col' style={{ width: 100 }}>
-									Available
+									Hiện có
 								</th>
 								<th scope='col' style={{ width: 80 }}>
-									Price
+									Đơn giá
 								</th>
 								<th scope='col' style={{ width: 100 }}>
-									Quantity
+									Số lượng
 								</th>
 								<th
 									scope='col'
@@ -278,83 +378,90 @@ class Bm extends Component {
 									var name_input_soluongmua =
 										'soluongmua_' + index
 									return (
-										<>
-											<tr>
-												<th scope='row'>
-													{value.name}
-												</th>
-												{/* <td>{value.type}</td>
-												<td>{value.country}</td> */}
-												<td>
-													<span
-														class={`flag-icon flag-icon-${value.country}`}
-													></span>
-												</td>
-												<td className='text-danger'>
-													{value.live_count}
-												</td>
-												<td style={{ color: 'blue' }}>
-													{that.formatMoney(
-														value.price
-													)}
-													đ{' '}
-												</td>
-												<td>
-													{that.props.auth.user !=
-													null ? (
-														<input
-															type='number'
-															className='form-control'
-															name={
-																name_input_soluongmua
-															}
-															value={
-																that.state[
-																	name_input_soluongmua
-																]
-															}
-															onChange={
-																that.onChange
-															}
-														/>
-													) : (
-														''
-													)}
-												</td>
-												<td>
-													{that.props.auth.user !=
-													null ? (
-														<button
-															className='btn btn-primary btn-nw'
-															onClick={() => {
-																that.buyNow(
-																	name_input_soluongmua,
-																	value.price,
-																	value.live_count,
-																	value._id,
-																	value.name,
-																	value.description
+										<tr>
+											<th scope='row'>
+												{value.icon ? (
+													<img
+														style={{
+															width: 20,
+														}}
+														src={
+															iconList[
+																renderIcon(
+																	value.icon
 																)
+															].image
+														}
+														alt='logo'
+													/>
+												) : null}{' '}
+												{value.name}
+											</th>
+
+											<td>
+												<span
+													className={`flag-icon flag-icon-${value.country}`}
+												></span>
+											</td>
+											<td className='text-danger'>
+												{value.live_count}
+											</td>
+											<td style={{ color: 'blue' }}>
+												{that.formatMoney(value.price)}đ{' '}
+											</td>
+											<td>
+												{that.props.auth.user !=
+												null ? (
+													<input
+														type='number'
+														className='form-control'
+														name={
+															name_input_soluongmua
+														}
+														value={
+															that.state[
+																name_input_soluongmua
+															]
+														}
+														onChange={that.onChange}
+													/>
+												) : (
+													''
+												)}
+											</td>
+											<td>
+												{that.props.auth.user !=
+												null ? (
+													<button
+														className='btn btn-primary btn-nw'
+														onClick={() => {
+															that.buyNow(
+																name_input_soluongmua,
+																value.price,
+																value.live_count,
+																value._id,
+																value.name,
+																value.description
+															)
+														}}
+													>
+														<ShoppingCartOutlined
+															style={{
+																'font-size':
+																	'16px',
+																verticalAlign:
+																	'0.125em',
 															}}
-														>
-															<ShoppingCartOutlined
-																style={{
-																	'font-size':
-																		'16px',
-																	verticalAlign:
-																		'0.125em',
-																}}
-															/>{' '}
-															Mua
-														</button>
-													) : (
-														<span className='text-danger font-bold'>
-															Đăng nhập để mua
-														</span>
-													)}
-												</td>
-											</tr>
-										</>
+														/>{' '}
+														Mua
+													</button>
+												) : (
+													<span className='text-danger font-bold'>
+														Đăng nhập để mua
+													</span>
+												)}
+											</td>
+										</tr>
 									)
 								} else {
 									return ''
@@ -366,8 +473,137 @@ class Bm extends Component {
 			</>
 		)
 
+		const listHistoryOrder = (
+			<>
+				<div className='table-responsive'>
+					<table className='table table-striped table-bordered table-hover table-sm'>
+						<thead className='thead-light'>
+							<tr>
+								<th scope='col' style={{ width: 120 }}>
+									Người mua
+								</th>
+
+								<th scope='col'>Logs</th>
+								<th scope='col' style={{ width: 120 }}>
+									Giá
+								</th>
+								<th scope='col' style={{ width: 170 }}>
+									Thời gian
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{userlogs.map((item, i) => {
+								return (
+									<tr key={i}>
+										<th
+											scope='row'
+											style={{
+												textAlign: 'center',
+												verticalAlign: 'middle',
+											}}
+										>
+											{item.user_name}
+										</th>
+
+										<td
+											style={{
+												textAlign: 'left',
+												paddingLeft: 20,
+											}}
+										>
+											Mua {item.soluongmua}{' '}
+											{item.name_category}
+										</td>
+
+										<td>
+											{that.formatMoney(
+												item.price_buy /
+													parseInt(item.soluongmua)
+											)}{' '}
+											VNĐ
+										</td>
+
+										<td>
+											{humanized_time_span(
+												Date.parse(item.ngaymua),
+												Date.now()
+											)}
+										</td>
+									</tr>
+								)
+							})}
+						</tbody>
+					</table>
+				</div>
+			</>
+		)
+
+		const listHistoryRecharge = (
+			<>
+				<div className='table-responsive'>
+					<table className='table table-striped table-bordered table-hover table-sm'>
+						<thead className='thead-light'>
+							<tr>
+								<th scope='col' style={{ width: 120 }}>
+									Người mua
+								</th>
+
+								<th scope='col'>Logs</th>
+								<th scope='col' style={{ width: 170 }}>
+									Thời gian
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{userdeposit.map((item, i) => {
+								console.log(item.thoigian_nap)
+
+								return (
+									<tr key={i}>
+										<th
+											scope='row'
+											style={{
+												textAlign: 'center',
+												verticalAlign: 'middle',
+											}}
+										>
+											{item.name_user}
+										</th>
+
+										<td
+											style={{
+												textAlign: 'left',
+												paddingLeft: 20,
+											}}
+										>
+											Nạp{' '}
+											{that.formatMoney(item.tien_nap)}{' '}
+											VNĐ vào tài khoản
+										</td>
+
+										<td>
+											{humanized_time_span(
+												Date.parse(
+													'2021-12-16T09:59:59.470Z'
+												),
+												Date.parse(
+													'2021-12-16T15:59:59.470Z'
+												)
+											)}
+										</td>
+									</tr>
+								)
+							})}
+						</tbody>
+					</table>
+				</div>
+			</>
+		)
+
 		return (
 			<Fragment>
+				{/* Danh sách BM */}
 				<div
 					className='content custom_content'
 					style={{ paddingTop: '0px' }}
@@ -384,6 +620,7 @@ class Bm extends Component {
 						</div>
 					</div>
 				</div>
+				{/* Danh sách VIA */}
 				<div
 					className='content custom_content'
 					style={{ paddingTop: '0px' }}
@@ -402,7 +639,29 @@ class Bm extends Component {
 						</div>
 					</div>
 				</div>
-
+				{/* Lịch sử order */}
+				<div className='content' style={{ paddingTop: '0px' }}>
+					<div className='card'>
+						<div className='card-header'>
+							<h3 className='card-title'>Lịch sử Order</h3>
+						</div>
+						<div className='card-body border-bottom-none'>
+							<div className='row'>{listHistoryOrder}</div>
+						</div>
+					</div>
+				</div>
+				{/* Lịch sử nạp tiền */}
+				<div className='content' style={{ paddingTop: '0px' }}>
+					<div className='card'>
+						<div className='card-header'>
+							<h3 className='card-title'>Lịch sử Nạp tiền</h3>
+						</div>
+						<div className='card-body border-bottom-none'>
+							<div className='row'>{listHistoryRecharge}</div>
+						</div>
+					</div>
+				</div>
+				{/* Chính sách hệ thống */}
 				<div className='content' style={{ paddingTop: '0px' }}>
 					<div className='card'>
 						<div className='card-header'>
@@ -440,6 +699,15 @@ class Bm extends Component {
 	}
 }
 
+const renderIcon = (icon) => {
+	for (let i = 0; i < iconList.length; i++) {
+		if (iconList[i].code === icon) {
+			return i
+		}
+	}
+	return null
+}
+
 const mapStateToProps = (state) => ({
 	auth: state.auth,
 	item: state.item,
@@ -448,4 +716,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
 	getProductByCategoryClient,
 	muaTaikhoan,
+	laylichsumuauser,
+	laylichsunapuser,
 })(Bm)

@@ -1,14 +1,22 @@
-import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from '../actions/types';
+import {
+	GET_ITEMS,
+	ADD_ITEM,
+	DELETE_ITEM,
+	ITEMS_LOADING,
+} from '../actions/types'
 
 const initialState = {
 	items: [],
 	product: [],
-	productAmin: [], 
+	productAmin: [],
 	lichsumua: [],
 	adminlogs: [],
+	userlogs: [], // new
 	admintongdoanhthu: [],
 	admindespit: [],
+	userdeposit: [],
 	lichsunap: [],
+	userlichsunap: [],
 	adminnotifi: [],
 	notifi: {
 		thongbao: '',
@@ -17,7 +25,7 @@ const initialState = {
 		link_backup: '',
 		link_group_fb: '',
 		link_group_zalo: '',
-		link_group_tele: ''
+		link_group_tele: '',
 	},
 	checkBm: [],
 	viewProduct: [],
@@ -32,107 +40,119 @@ const initialState = {
 		data_bank: '',
 		link_group_fb: '',
 		link_group_zalo: '',
-		link_group_tele: ''
+		link_group_tele: '',
 	},
 	loading: false,
 	totalmoney: 0,
 	listproductloi: [],
-};
+}
 
-export default function(state = initialState, action) {
-	switch(action.type) {
+export default function (state = initialState, action) {
+	switch (action.type) {
 		case GET_ITEMS:
 			return {
 				...state,
 				items: action.payload,
-				loading: false
+				loading: false,
 			}
 		case DELETE_ITEM:
 			return {
 				...state,
-				items: state.items.filter(item => item._id !== action.payload)
+				items: state.items.filter(
+					(item) => item._id !== action.payload
+				),
 			}
 		case ADD_ITEM:
 			return {
 				...state,
-				items: [action.payload, ...state.items]
+				items: [action.payload, ...state.items],
 			}
 		case 'GET_PRODUCT':
 			return {
 				...state,
-				product: action.payload
+				product: action.payload,
 			}
 		case 'GET_PRODUCT_ADMIN':
 			return {
 				...state,
-				productAmin: action.payload
+				productAmin: action.payload,
 			}
 		case 'VIEW_PRODUCT':
 			return {
 				...state,
-				viewProduct: action.payload
+				viewProduct: action.payload,
 			}
 		case 'LAY_LICH_SU_MUA':
 			return {
 				...state,
-				lichsumua: action.payload
+				lichsumua: action.payload,
 			}
 		case 'ADMIN_LAY_LICH_SU_MUA':
 			return {
 				...state,
-				adminlogs: action.payload
+				adminlogs: action.payload,
+			}
+		case 'USER_LAY_LICH_SU_MUA':
+			return {
+				...state,
+				userlogs: action.payload,
 			}
 		case 'ADMIN_LAY_TONG_DOANH_THU':
 			return {
 				...state,
-				admintongdoanhthu: action.payload
+				admintongdoanhthu: action.payload,
 			}
 		case 'DATA_CHECK_BM':
 			return {
 				...state,
-				checkBm: [action.payload, ...state.checkBm]
+				checkBm: [action.payload, ...state.checkBm],
 			}
 		case 'ADMIN_LAY_LICH_SU_NAP':
 			return {
 				...state,
-				admindespit: action.payload
+				admindespit: action.payload,
+			}
+		case 'USER_LAY_LICH_SU_NAP':
+			return {
+				...state,
+				userdeposit: action.payload,
 			}
 		case 'LAY_LICH_SU_NAP':
 			return {
 				...state,
-				lichsunap: action.payload
+				lichsunap: action.payload,
 			}
 		case 'ADMIN_LAY_THONG_BAO':
 			return {
 				...state,
-				adminConfig: action.payload
+				adminConfig: action.payload,
 			}
 		case 'CHANGE_CONFIG':
 			return {
 				...state,
-				adminConfig: action.payload
+				adminConfig: action.payload,
 			}
 		case 'LAY_THONG_BAO':
 			return {
 				...state,
-				notifi: action.payload
+				notifi: action.payload,
 			}
 		case ITEMS_LOADING:
 			return {
 				...state,
-				loading: action.payload
+				loading: action.payload,
 			}
-		case "TOTAL_MONEY":
+		case 'TOTAL_MONEY':
 			return {
 				...state,
-				totalmoney: action.payload
+				totalmoney: action.payload,
 			}
-		case "LIST_PRODUCT_LOI":
+		case 'LIST_PRODUCT_LOI':
 			return {
 				...state,
-				listproductloi: action.payload
+				listproductloi: action.payload,
 			}
 		default:
-			return state;
+			return state
 	}
 }

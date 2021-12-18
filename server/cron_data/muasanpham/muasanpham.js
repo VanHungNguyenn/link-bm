@@ -64,23 +64,23 @@ function xulySanPham(body, id_giaodich) {
 					.limit(body.sl)
 					.then(async (product) => {
 						if (product.length >= parseInt(body.sl)) {
-							var checkpoint = 0
-							for (var i = 0; i < product.length; i++) {
-								checkpoint = await checkUID(
-									product[i].data.split('|')[0]
-								)
-								if (checkpoint == 1) {
-									var query = { _id: product[i]._id }
-									Product.findOneAndUpdate(
-										query,
-										{ status: 2 },
-										{ upsert: true },
-										function (err, doc) {}
-									)
-									xulySanPham(body, id_giaodich)
-									return false
-								}
-							}
+							// var checkpoint = 0
+							// for (var i = 0; i < product.length; i++) {
+							// 	checkpoint = await checkUID(
+							// 		product[i].data.split('|')[0]
+							// 	)
+							// 	if (checkpoint == 1) {
+							// 		var query = { _id: product[i]._id }
+							// 		Product.findOneAndUpdate(
+							// 			query,
+							// 			{ status: 2 },
+							// 			{ upsert: true },
+							// 			function (err, doc) {}
+							// 		)
+							// 		xulySanPham(body, id_giaodich)
+							// 		return false
+							// 	}
+							// }
 							var ids = []
 							product.forEach(function (value, index) {
 								ids.push(value._id)

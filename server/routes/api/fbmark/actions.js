@@ -843,6 +843,7 @@ router.get('/lichsunaptien', auth, (req, res) => {
 		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
 	}
 })
+
 router.get('/adminlichsunaptien', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
@@ -861,6 +862,16 @@ router.get('/adminlichsunaptien', auth, (req, res) => {
 			.catch(function (error) {
 				res.send({ error: 400, msg: 'Có lỗi xảy ra' })
 			})
+	} catch (e) {
+		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
+	}
+})
+
+router.get('/userlichsunaptien', (req, res) => {
+	try {
+		LichSuNapTien.find()
+			.sort({ thoigian_nap: -1 })
+			.then((items) => res.json(items))
 	} catch (e) {
 		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
 	}
@@ -1014,6 +1025,7 @@ router.get('/notifilogs', auth, (req, res) => {
 		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
 	}
 })
+
 router.get('/adminlogs', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
@@ -1036,6 +1048,18 @@ router.get('/adminlogs', auth, (req, res) => {
 		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
 	}
 })
+
+// Get public history buy
+router.get('/userlogs', (req, res) => {
+	try {
+		Logs.find()
+			.sort({ ngaymua: -1 })
+			.then((items) => res.json(items))
+	} catch (e) {
+		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
+	}
+})
+
 router.get('/admintongdoanhthu', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)

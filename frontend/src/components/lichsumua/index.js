@@ -1,26 +1,27 @@
 import React, { Component, Fragment } from 'react'
-import { Link } from 'react-router-dom'
+
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+
 import {
 	laylichsumua,
 	downloadProduct,
 	veiwProduct,
 } from '../../actions/itemActions'
-import DataTable from 'react-data-table-component'
+
 import paginationFactory from 'react-bootstrap-table2-paginator'
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit'
+
 import BootstrapTable from 'react-bootstrap-table-next'
-import Swal from 'sweetalert2'
+
 import { Modal, ModalBody } from 'reactstrap'
-const myNewTheme = {
-	headCells: {
-		style: {
-			fontWeight: 'bold',
-			fontSize: '14px',
-		},
-	},
-}
+
+// const myNewTheme = {
+// 	headCells: {
+// 		style: {
+// 			fontWeight: 'bold',
+// 			fontSize: '14px',
+// 		},
+// 	},
+// }
 class LichSuMua extends Component {
 	state = {
 		isModalBrowseGroupsOpen: false,

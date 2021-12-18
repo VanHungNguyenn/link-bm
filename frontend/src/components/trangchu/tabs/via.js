@@ -1,23 +1,19 @@
-import React, { Component, Fragment } from 'react';
-import { Link } from "react-router-dom";
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react'
+
+import { connect } from 'react-redux'
+
 class Via extends Component {
-	
 	render() {
-		
 		return (
 			<Fragment>
-				<div>
-					bbbbbbbbbbbbbbbbbbb
-                </div>
+				<div>bbbbbbbbbbbbbbbbbbb</div>
 			</Fragment>
 		)
 	}
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
 	auth: state.auth,
-});
+})
 
-export default connect(mapStateToProps, {})(Via);
+export default connect(mapStateToProps, {})(Via)
