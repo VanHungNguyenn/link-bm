@@ -11,6 +11,7 @@ import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2'
 import { FireOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import iconList from '../../../config/icon'
+import { timeAgo } from '../../../utils/timeAgo'
 
 const humanized_time_span = (date, ref_date, date_formats, time_units) => {
 	//Date Formats must be be ordered smallest -> largest and must end in a format with ceiling of null
@@ -487,7 +488,7 @@ class Bm extends Component {
 								<th scope='col' style={{ width: 120 }}>
 									Giá
 								</th>
-								<th scope='col' style={{ width: 170 }}>
+								<th scope='col' style={{ width: 140 }}>
 									Thời gian
 								</th>
 							</tr>
@@ -525,9 +526,8 @@ class Bm extends Component {
 										</td>
 
 										<td>
-											{humanized_time_span(
-												Date.parse(item.ngaymua),
-												Date.now()
+											{timeAgo.format(
+												Date.parse(item.ngaymua)
 											)}
 										</td>
 									</tr>
@@ -550,15 +550,13 @@ class Bm extends Component {
 								</th>
 
 								<th scope='col'>Logs</th>
-								<th scope='col' style={{ width: 170 }}>
+								<th scope='col' style={{ width: 140 }}>
 									Thời gian
 								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{userdeposit.map((item, i) => {
-								console.log(item.thoigian_nap)
-
 								return (
 									<tr key={i}>
 										<th
@@ -583,13 +581,8 @@ class Bm extends Component {
 										</td>
 
 										<td>
-											{humanized_time_span(
-												Date.parse(
-													'2021-12-16T09:59:59.470Z'
-												),
-												Date.parse(
-													'2021-12-16T15:59:59.470Z'
-												)
+											{timeAgo.format(
+												Date.parse(item.thoigian_nap)
 											)}
 										</td>
 									</tr>

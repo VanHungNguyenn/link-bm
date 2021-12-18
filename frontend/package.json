@@ -19,6 +19,7 @@
 		"flag-icon-css": "^4.1.6",
 		"fs": "0.0.1-security",
 		"html-react-parser": "^0.10.1",
+		"javascript-time-ago": "^2.3.10",
 		"loadjs": "^4.2.0",
 		"moment": "^2.24.0",
 		"otpauth": "^5.0.6",
