@@ -1,15 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 import {
 	getProductByCategoryClient,
 	muaTaikhoan,
 	laylichsumuauser,
 	laylichsunapuser,
 } from '../../../actions/itemActions'
-import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2'
-import { FireOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { ShoppingCartOutlined } from '@ant-design/icons'
 import iconList from '../../../config/icon'
 import { timeAgo } from '../../../utils/timeAgo'
 
@@ -212,135 +210,135 @@ class Bm extends Component {
 
 		var that = this
 
-		const listbm = (
-			<>
-				<div className='table-responsive'>
-					<table className='table table-striped table-bordered table-hover table-sm'>
-						<thead className='thead-light'>
-							<tr>
-								<th scope='col'>Tên sản phẩm</th>
+		// const listbm = (
+		// 	<>
+		// 		<div className='table-responsive'>
+		// 			<table className='table table-striped table-bordered table-hover table-sm'>
+		// 				<thead className='thead-light'>
+		// 					<tr>
+		// 						<th scope='col'>Tên sản phẩm</th>
 
-								<th scope='col' style={{ width: 80 }}>
-									Quốc gia
-								</th>
-								<th scope='col' style={{ width: 100 }}>
-									Hiện có
-								</th>
-								<th scope='col' style={{ width: 80 }}>
-									Đơn giá
-								</th>
-								<th scope='col' style={{ width: 100 }}>
-									Số lượng
-								</th>
-								<th
-									scope='col'
-									className='align-middle'
-									style={{ width: 100 }}
-								>
-									Action
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{bmlist.map(function (value, index) {
-								if (value.type == 'BM') {
-									var name_input_soluongmua =
-										'soluongmua_' + index
+		// 						<th scope='col' style={{ width: 80 }}>
+		// 							Quốc gia
+		// 						</th>
+		// 						<th scope='col' style={{ width: 100 }}>
+		// 							Hiện có
+		// 						</th>
+		// 						<th scope='col' style={{ width: 80 }}>
+		// 							Đơn giá
+		// 						</th>
+		// 						<th scope='col' style={{ width: 100 }}>
+		// 							Số lượng
+		// 						</th>
+		// 						<th
+		// 							scope='col'
+		// 							className='align-middle'
+		// 							style={{ width: 100 }}
+		// 						>
+		// 							Action
+		// 						</th>
+		// 					</tr>
+		// 				</thead>
+		// 				<tbody>
+		// 					{bmlist.map(function (value, index) {
+		// 						if (value.type == 'BM') {
+		// 							var name_input_soluongmua =
+		// 								'soluongmua_' + index
 
-									return (
-										<tr>
-											<th scope='row'>
-												{value.icon ? (
-													<img
-														style={{
-															width: 20,
-														}}
-														src={
-															iconList[
-																renderIcon(
-																	value.icon
-																)
-															].image
-														}
-														alt='logo'
-													/>
-												) : null}{' '}
-												{value.name}
-											</th>
-											<td>
-												<span
-													className={`flag-icon flag-icon-${value.country}`}
-												></span>
-											</td>
-											<td className='text-danger'>
-												{value.live_count}
-											</td>
-											<td style={{ color: 'blue' }}>
-												{that.formatMoney(value.price)}đ{' '}
-											</td>
-											<td>
-												{that.props.auth.user !=
-												null ? (
-													<input
-														type='number'
-														className='form-control'
-														name={
-															name_input_soluongmua
-														}
-														value={
-															that.state[
-																name_input_soluongmua
-															]
-														}
-														onChange={that.onChange}
-													/>
-												) : (
-													''
-												)}
-											</td>
-											<td>
-												{that.props.auth.user !=
-												null ? (
-													<button
-														className='btn btn-primary btn-nw'
-														onClick={() => {
-															that.buyNow(
-																name_input_soluongmua,
-																value.price,
-																value.live_count,
-																value._id,
-																value.name,
-																value.description
-															)
-														}}
-													>
-														<ShoppingCartOutlined
-															style={{
-																'font-size':
-																	'16px',
-																verticalAlign:
-																	'0.125em',
-															}}
-														/>{' '}
-														Mua
-													</button>
-												) : (
-													<span className='text-danger font-bold'>
-														Đăng nhập để mua
-													</span>
-												)}
-											</td>
-										</tr>
-									)
-								} else {
-									return ''
-								}
-							})}
-						</tbody>
-					</table>
-				</div>
-			</>
-		)
+		// 							return (
+		// 								<tr>
+		// 									<th scope='row'>
+		// 										{value.icon ? (
+		// 											<img
+		// 												style={{
+		// 													width: 20,
+		// 												}}
+		// 												src={
+		// 													iconList[
+		// 														renderIcon(
+		// 															value.icon
+		// 														)
+		// 													].image
+		// 												}
+		// 												alt='logo'
+		// 											/>
+		// 										) : null}{' '}
+		// 										{value.name}
+		// 									</th>
+		// 									<td>
+		// 										<span
+		// 											className={`flag-icon flag-icon-${value.country}`}
+		// 										></span>
+		// 									</td>
+		// 									<td className='text-danger'>
+		// 										{value.live_count}
+		// 									</td>
+		// 									<td style={{ color: 'blue' }}>
+		// 										{that.formatMoney(value.price)}đ{' '}
+		// 									</td>
+		// 									<td>
+		// 										{that.props.auth.user !=
+		// 										null ? (
+		// 											<input
+		// 												type='number'
+		// 												className='form-control'
+		// 												name={
+		// 													name_input_soluongmua
+		// 												}
+		// 												value={
+		// 													that.state[
+		// 														name_input_soluongmua
+		// 													]
+		// 												}
+		// 												onChange={that.onChange}
+		// 											/>
+		// 										) : (
+		// 											''
+		// 										)}
+		// 									</td>
+		// 									<td>
+		// 										{that.props.auth.user !=
+		// 										null ? (
+		// 											<button
+		// 												className='btn btn-primary btn-nw'
+		// 												onClick={() => {
+		// 													that.buyNow(
+		// 														name_input_soluongmua,
+		// 														value.price,
+		// 														value.live_count,
+		// 														value._id,
+		// 														value.name,
+		// 														value.description
+		// 													)
+		// 												}}
+		// 											>
+		// 												<ShoppingCartOutlined
+		// 													style={{
+		// 														'font-size':
+		// 															'16px',
+		// 														verticalAlign:
+		// 															'0.125em',
+		// 													}}
+		// 												/>{' '}
+		// 												Mua
+		// 											</button>
+		// 										) : (
+		// 											<span className='text-danger font-bold'>
+		// 												Đăng nhập để mua
+		// 											</span>
+		// 										)}
+		// 									</td>
+		// 								</tr>
+		// 							)
+		// 						} else {
+		// 							return ''
+		// 						}
+		// 					})}
+		// 				</tbody>
+		// 			</table>
+		// 		</div>
+		// 	</>
+		// )
 
 		const listvia = (
 			<>
@@ -597,7 +595,7 @@ class Bm extends Component {
 		return (
 			<Fragment>
 				{/* Danh sách BM */}
-				<div
+				{/* <div
 					className='content custom_content'
 					style={{ paddingTop: '0px' }}
 				>
@@ -612,7 +610,7 @@ class Bm extends Component {
 							<div className='row'>{listbm}</div>
 						</div>
 					</div>
-				</div>
+				</div> */}
 				{/* Danh sách VIA */}
 				<div
 					className='content custom_content'

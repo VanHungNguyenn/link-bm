@@ -538,6 +538,44 @@ function checklinkbmstep4(res, fb_dtsg, idbm, cookie, st1, st2) {
 			})
 		})
 }
+
+router.post('/buyproductauto', (req, res) => {
+	try {
+		const { id_category, user_name, sl } = req.body
+
+		CategoryProduct.findById(id_category)
+			.sort({ date: -1 })
+			.then((categoryProduct) => {
+				console.log(categoryProduct)
+				const price1product = categoryProduct.price
+				const name_category = categoryProduct.name
+				console.log(
+					'price1product: ',
+					price1product,
+					'\nname_category: ',
+					name_category
+				)
+				User.findOne({ name: user_name })
+					.sort({ date: -1 })
+					.then((client) => {
+						console.log(client)
+						const id_user = client._id
+						const balance_user = client.balance
+						console.log(
+							'id_user: ',
+							id_user,
+							'\nbalance_user: ',
+							balance_user
+						)
+					})
+			})
+
+		res.status(200).json({ msg: 'Success' })
+	} catch (err) {
+		res.status(500).json({ msg: err.message })
+	}
+})
+
 router.post('/buyproduct', auth, (req, res) => {
 	try {
 		var decrypt = CryptoJS.AES.decrypt(
@@ -613,7 +651,7 @@ router.get('/categoryproduct', (req, res) => {
 					var new_categoryproduct_tmp = {}
 					for (var i = 0; i < categoryproduct.length; i++) {
 						var sql_find = {
-							sell: { $in: 0 },
+							sell: { $in: 0 }, // 0: chua ban, 1: da ban
 							status: { $in: 1 },
 							id_loaisp: { $in: categoryproduct[i]._id },
 						}
@@ -871,7 +909,11 @@ router.get('/userlichsunaptien', (req, res) => {
 	try {
 		LichSuNapTien.find()
 			.sort({ thoigian_nap: -1 })
-			.then((items) => res.json(items))
+			.then((items) => {
+				const sliceItems = items.slice(0, 9)
+
+				res.json(sliceItems)
+			})
 	} catch (e) {
 		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
 	}
@@ -978,7 +1020,6 @@ router.post('/updatelichsunaptien', auth, (req, res) => {
 	}
 })
 
-// xu ly lich su nap tien
 router.get('/logs', auth, (req, res) => {
 	try {
 		Logs.find({ id_user: req.user.id })
@@ -1054,7 +1095,11 @@ router.get('/userlogs', (req, res) => {
 	try {
 		Logs.find()
 			.sort({ ngaymua: -1 })
-			.then((items) => res.json(items))
+			.then((items) => {
+				const sliceItems = items.slice(0, 9)
+
+				res.json(sliceItems)
+			})
 	} catch (e) {
 		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
 	}

@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../../middleware/auth')
-
+const authAuto = require('../../../middleware/authAuto')
 const listUser = require('../../../models/User')
+
+const SecretToken = require('../../../models/secret_token')
+const jwt = require('jsonwebtoken')
+const config = require('config')
 
 router.get('/', auth, (req, res) => {
 	listUser
@@ -29,15 +33,23 @@ router.post('/edit', auth, (req, res) => {
 		.then((useradmin) => {
 			if (useradmin.role === 1) {
 				var { _id, thembot, thembot_value } = req.body
-
+				// console.log('zzzzzzzzz');
+				// var value = parseInt(balance);
+				// var tiennap = parseInt(tongtiennap);
+				// if (thembot == '+') {
+				// value = parseInt(balance) + parseInt(thembot_value);
+				// tiennap =parseInt(tongtiennap) + parseInt(thembot_value);
+				// }
+				// if (thembot == '-') {
+				// value = parseInt(balance) - parseInt(thembot_value);
+				// tiennap =parseInt(tongtiennap) - parseInt(thembot_value);
+				// }
 				var new_value = Math.abs(thembot_value)
 				var new_value_total = Math.abs(thembot_value)
-
 				if (thembot == '-') {
 					new_value = new_value * -1
 					new_value_total = 0
 				}
-
 				listUser
 					.findOneAndUpdate(
 						{ _id: _id },
@@ -82,5 +94,88 @@ router.post('/edit', auth, (req, res) => {
 			res.send({ status: 400, msg: 'Có lỗi xảy ra' })
 		})
 })
+
+router.post('/editauto', authAuto, async (req, res) => {
+	try {
+		var { name, thembot, thembot_value } = req.body
+
+		var new_value = Math.abs(thembot_value)
+		var new_value_total = Math.abs(thembot_value)
+
+		if (thembot == '-') {
+			new_value = new_value * -1
+			new_value_total = 0
+		}
+
+		await listUser
+			.findOneAndUpdate(
+				{ name: name },
+				{
+					$inc: {
+						balance: parseInt(new_value),
+						tongtiennap: parseInt(new_value_total),
+					},
+				}
+			)
+			.then(function (vip) {
+				if (thembot == '+') {
+					const newLichSuNapTien = new LichSuNapTien({
+						id_user: vip.id,
+						name_user: vip.name,
+						ma_nap: '',
+						noidung: 'Nạp tiền tự động',
+						tien_nap: parseInt(new_value),
+					})
+					newLichSuNapTien.save().then((setting) => {
+						return res
+							.status(200)
+							.json({ msg: 'Nạp tiền tự động thành công' })
+
+						// return res.send({
+						// 	status: 200,
+						// 	msg: 'Sửa tiền dư thành công!',
+						// })
+					})
+				} else {
+					return res
+						.status(200)
+						.json({ msg: 'Nạp tiền tự động thành công' })
+					// return res.send({
+
+					// 	status: 200,
+					// 	msg: 'Sửa tiền dư thành công!',
+					// })
+				}
+			})
+			.catch(function (err) {
+				// console.log(error);
+				return res.status(500).json({ msg: err.message })
+			})
+	} catch (err) {
+		return res.status(500).json({ msg: err.message })
+	}
+})
+
+router.post('/createtoken', auth, async (req, res) => {
+	try {
+		const { secretString } = req.body
+		const token = createToken(secretString)
+
+		await SecretToken.findOneAndUpdate(
+			{
+				_id: '61c06156d8958d4988c622e1',
+			},
+			token
+		)
+
+		res.json({ msg: 'Token has been created', token: token })
+	} catch (err) {
+		return res.status(500).json({ msg: err.message })
+	}
+})
+
+const createToken = (payload) => {
+	return jwt.sign(payload, config.get('jwtSecret'))
+}
 
 module.exports = router
