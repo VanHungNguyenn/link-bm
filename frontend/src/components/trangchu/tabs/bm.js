@@ -124,6 +124,7 @@ class Bm extends Component {
 		var balance = this.props.auth.user.balance
 		var tongtienmua = this.props.auth.user.tongtienmua
 		if (count_selected <= 0) {
+			//
 			Swal.fire('Đã hết sản phẩm!', '', 'error')
 			return false
 		}
@@ -132,18 +133,23 @@ class Bm extends Component {
 			return false
 		}
 		if (!Number.isInteger(sl)) {
+			//
 			Swal.fire('Số lượng mua bạn đã nhập không hợp lệ!', '', 'error')
 			return false
 		}
 		if (count_selected < sl) {
+			//
 			Swal.fire('Bạn đã nhập quá số sản phẩm cho phép!', '', 'error')
 			return false
 		}
 		if (sl <= 0) {
+			//
+			//
 			Swal.fire('Số lượng mua bạn đã nhập không hợp lệ!', '', 'error')
 			return false
 		}
 		if (typeof sl === 'undefined') {
+			//
 			Swal.fire('Nhập số lượng muốn mua!', '', 'error')
 			return false
 		}

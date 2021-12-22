@@ -16,6 +16,7 @@ const Notifi = require('../../../models/notifi')
 const User = require('../../../models/User')
 const MuaSanPham = require('../../../models/muasanpham')
 const MuaSanPhamLoi = require('../../../models/muasanphamloi')
+const product = require('../../../models/product')
 
 var options = {
 	iv: CryptoJS.enc.Hex.parse('00000000000000000000000000000000'),
@@ -539,38 +540,153 @@ function checklinkbmstep4(res, fb_dtsg, idbm, cookie, st1, st2) {
 		})
 }
 
-router.post('/buyproductauto', (req, res) => {
+function isNumeric(str) {
+	if (typeof str != 'string') return false // we only process strings!
+	return (
+		!isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+		!isNaN(parseFloat(str))
+	) // ...and ensure strings of whitespace fail
+}
+
+router.post('/buyproductauto', async (req, res) => {
 	try {
 		const { id_category, user_name, sl } = req.body
+
+		if (typeof sl === 'undefined') {
+			return res.status(400).json({ msg: 'Nhập số lượng bạn muốn mua.' })
+		}
+		if (!Number.isInteger(Number(sl))) {
+			return res
+				.status(400)
+				.json({ msg: 'Số lượng mua bạn đã nhập không hợp lệ.' })
+		}
+		if (parseInt(sl) <= 0) {
+			return res
+				.status(400)
+				.json({ msg: 'Số lượng mua bạn đã nhập không hợp lệ.' })
+		}
+
+		let live_count = 0
+		var sql_find = {
+			sell: { $in: 0 }, // 0: chua ban, 1: da ban
+			status: { $in: 1 },
+			id_loaisp: { $in: id_category },
+		}
+
+		await Product.countDocuments(sql_find).then((count_product) => {
+			live_count = count_product
+		})
+
+		console.log(live_count)
+
+		if (live_count <= 0) {
+			return res.status(400).json({ msg: 'Đã hết sản phẩm.' })
+		}
+
+		if (live_count < sl) {
+			return res
+				.status(400)
+				.json({ msg: 'Bạn đã nhập quá số lượng sản phẩm cho phép!' })
+		}
 
 		CategoryProduct.findById(id_category)
 			.sort({ date: -1 })
 			.then((categoryProduct) => {
-				console.log(categoryProduct)
 				const price1product = categoryProduct.price
 				const name_category = categoryProduct.name
-				console.log(
-					'price1product: ',
-					price1product,
-					'\nname_category: ',
-					name_category
-				)
+				const description_category = categoryProduct.description
+				const totalPrice = parseInt(sl) * price1product
+
 				User.findOne({ name: user_name })
 					.sort({ date: -1 })
-					.then((client) => {
-						console.log(client)
+					.then(async (client) => {
 						const id_user = client._id
 						const balance_user = client.balance
-						console.log(
-							'id_user: ',
-							id_user,
-							'\nbalance_user: ',
-							balance_user
+						const tongtienmua = client.tongtienmua
+
+						if (balance_user < totalPrice) {
+							return res
+								.status(400)
+								.json({ msg: 'Tài khoản không đủ tiền để mua' })
+						}
+
+						const newBalance = balance_user - totalPrice
+						const newTongtienmua = String(
+							parseInt(tongtienmua) + totalPrice
 						)
+
+						// Data update when user buy
+						var data = {
+							sell: 1,
+							id_user_buy: id_user,
+							date_sell: Date.now(),
+							name_user: user_name,
+						}
+
+						Product.find({
+							id_loaisp: id_category,
+							sell: 0,
+							status: 1,
+						})
+							.sort({ date: 1 })
+							.limit(Number(sl))
+							.then(async (products) => {
+								console.log('Products: ', products)
+								if (products.length >= parseInt(sl)) {
+									var ids = []
+
+									products.forEach((value) => {
+										ids.push(value._id)
+									})
+
+									const result = products
+
+									await Product.updateMany(
+										{ _id: { $in: ids } },
+										data,
+										{ upsert: true },
+										() => {
+											User.updateMany(
+												{ _id: id_user },
+												{
+													balance: newBalance,
+													tongtienmua: newTongtienmua,
+												},
+												{ upsert: true },
+												() => {
+													const newLogs = new Logs({
+														id_user: id_user,
+														user_name: user_name,
+														soluongmua:
+															parseInt(sl),
+														id_loaisanpham:
+															id_category,
+														name_category:
+															name_category,
+														description_category:
+															description_category,
+														price_buy: totalPrice,
+														id_sanpham: ids,
+													})
+
+													newLogs.save().then(() => {
+														res.status(200).json({
+															msg: 'Mua sản phẩm thành công',
+															result: result,
+														})
+													})
+												}
+											)
+										}
+									)
+								} else {
+									res.status(400).json({
+										msg: 'Hết tài khoản live!',
+									})
+								}
+							})
 					})
 			})
-
-		res.status(200).json({ msg: 'Success' })
 	} catch (err) {
 		res.status(500).json({ msg: err.message })
 	}
