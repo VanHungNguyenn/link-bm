@@ -23,7 +23,12 @@ const HistoryMomoSchema = new Schema({
 		type: Date,
 		default: Date.now,
 	},
-	content: {
+	status: {
+		//
+		type: String,
+		default: null,
+	},
+	comment: {
 		type: String,
 		default: null,
 	},

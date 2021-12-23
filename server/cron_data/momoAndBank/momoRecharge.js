@@ -125,39 +125,90 @@ const handleAutoMomoRecharge = async () => {
 		for (let i = 0; i < tranList.length; i++) {
 			const transaction = tranList[i]
 			const tranId = transaction.tranId
-			const comment = transaction.comment.toLowerCase()
+			const comment = transaction.comment.toLowerCase().trim()
 			const depositMoney = transaction.amount
 			const desc = transaction.desc
 			// const timeTransaction = transaction.clientTime
-
-			console.log(
-				'tranId: ',
-				tranId,
-				'\ncomment: ',
-				comment,
-				'\ndepositMoney: ',
-				depositMoney,
-				'\ndesc: ',
-				desc
-			)
 
 			// Thời gian nạp quá thời gian get API 5p
 			// if (timeEnd - timeTransaction > 300000) {
 			// Bỏ qua, xử lý phần tử tiếp theo trong vòng lặp
 			// } else {
 			if (desc === 'Thành công') {
-				// Không phải tiền nạp từ tk24h
-				if (comment.split(' ')[0] !== 'tk24h') {
-					HistoryMomo.findOne({ id_transaction: tranId })
-						.sort({ date: -1 })
-						.then((clientTransaction) => {
-							console.log(
-								`clientTransaction${i}`,
-								clientTransaction
-							)
-						})
-				} else {
-				}
+				// Tìm xem đã lưu lịch sử chưa
+				await HistoryMomo.findOne({ id_transaction: tranId })
+					.sort({ date: -1 })
+					.then(async (clientTransaction) => {
+						// Nếu chưa lưu lịch sử thì lưu vào
+						if (clientTransaction === null) {
+							// Không phải giao dịch của tk24h
+							if (comment.split(' ')[0] !== 'tk24h') {
+								const newHistoryMomo = new HistoryMomo({
+									id_transaction: tranId,
+									status: 'Không phải giao dịch của tk24h',
+									comment: comment,
+									depositMoney: depositMoney,
+								})
+
+								await newHistoryMomo.save()
+							} else {
+								if (comment.split(' ').length !== 2) {
+									const newHistoryMomo = new HistoryMomo({
+										id_transaction: tranId,
+										status: 'Giao dịch của tk24h, nhưng sai cú pháp',
+										comment: comment,
+										depositMoney: depositMoney,
+									})
+
+									await newHistoryMomo.save()
+								} else {
+									const user = comment.split(' ')[1]
+
+									Users.findOne({ name: user }).then(
+										async (client) => {
+											const { _id, name } = client
+
+											const newHistoryMomo =
+												new HistoryMomo({
+													id_transaction: tranId,
+													id_user: _id,
+													name_user: name,
+													depositMoney: depositMoney,
+													status: 'Giao dịch tk24h thành công',
+													comment: comment,
+												})
+
+											await newHistoryMomo.save()
+
+											await User.findOneAndUpdate(
+												{
+													name: name,
+												},
+												{
+													$inc: {
+														balance: depositMoney,
+														tongtiennap:
+															depositMoney,
+													},
+												}
+											).then(async () => {
+												const newLichSuNapTien =
+													new LichSuNapTien({
+														id_user: _id,
+														name_user: name,
+														noidung:
+															'Nạp tiền tự động bằng Momo',
+														tien_nap: depositMoney,
+													})
+
+												await newLichSuNapTien.save()
+											})
+										}
+									)
+								}
+							}
+						}
+					})
 			}
 			// }
 		}
