@@ -44,7 +44,7 @@ class NapTien extends Component {
 									}}
 								>
 									<img
-										src='/vietcombank-logo.jpg'
+										src='/techcombank-logo.png'
 										style={{ width: '30%' }}
 										alt=''
 									/>
@@ -75,7 +75,7 @@ class NapTien extends Component {
 										>
 											Nội dung :{' '}
 											<strong className='text-danger'>
-												golike {user.name}
+												tk24h {user.name}
 											</strong>
 										</p>
 										{this.state.copySuccessNapTienVCB ===
@@ -88,8 +88,7 @@ class NapTien extends Component {
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienVCB(
-															'golike ' +
-																user.name
+															'tk24h ' + user.name
 														)
 													}}
 												>
@@ -106,8 +105,7 @@ class NapTien extends Component {
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienVCB(
-															'golike ' +
-																user.name
+															'tk24h ' + user.name
 														)
 													}}
 												>
@@ -164,7 +162,7 @@ class NapTien extends Component {
 										>
 											Nội dung :{' '}
 											<strong className='text-danger'>
-												golike {user.name}
+												tk24h {user.name}
 											</strong>
 										</p>
 										{this.state.copySuccessNapTienMomo ===
@@ -177,8 +175,7 @@ class NapTien extends Component {
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienMomo(
-															'golike ' +
-																user.name
+															'tk24h ' + user.name
 														)
 													}}
 												>
@@ -195,8 +192,7 @@ class NapTien extends Component {
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienMomo(
-															'golike ' +
-																user.name
+															'tk24h ' + user.name
 														)
 													}}
 												>
@@ -251,7 +247,7 @@ class NapTien extends Component {
 								<div className='col-md-12 alert alert-info'>
 									<strong>
 										Lưu ý 1: Bạn phải ghi đúng nội dung
-										chuyển khoản như bên trên golike[dấu
+										chuyển khoản như bên trên tk24h[dấu
 										cách]Tên tài khoản. Bất cứ sai sót nào
 										cũng có thể dẫn đến mất tiền (nạp sai cú
 										pháp phí trừ nạp sai 10% số tiền nạp).
@@ -269,7 +265,7 @@ class NapTien extends Component {
 									<strong>
 										Lưu ý 3: Các trường hợp cần khẩn cấp vui
 										lòng inbox Zalo hoặc gọi trực tiếp số
-										0968 099 960 để được hỗ trợ nhanh nhất.
+										0829 999 181 để được hỗ trợ nhanh nhất.
 									</strong>
 								</div>
 							</div>

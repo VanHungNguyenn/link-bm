@@ -5,6 +5,7 @@ const config = require('config')
 const axios = require('axios')
 const jwt = require('jsonwebtoken')
 const auth = require('../../../middleware/auth')
+const authAuto = require('../../../middleware/authAuto')
 const CryptoJS = require('crypto-js')
 
 // User Model
@@ -548,7 +549,7 @@ function isNumeric(str) {
 	) // ...and ensure strings of whitespace fail
 }
 
-router.post('/buyproductauto', async (req, res) => {
+router.post('/buyproductauto', authAuto, async (req, res) => {
 	try {
 		const { id_category, user_name, sl } = req.body
 

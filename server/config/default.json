@@ -1,5 +1,7 @@
 {
 	"mongoURI": "mongodb://localhost/fbm",
 	"_mongoURI": "mongodb+srv://admin:admin@123@cluster0.oni48.mongodb.net/fbm",
-	"jwtSecret": "sl_huy1"
+	"jwtSecret": "sl_huy1",
+	"API_MOMO": "FA2AF113-955D-927E-862A-62A4B5A36889",
+	"API_BANK": "AAF5D3F2-1ACD-E253-424C-24C3BDF2AE78"
 }

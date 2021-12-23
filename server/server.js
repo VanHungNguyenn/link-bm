@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 var cron = require('node-cron')
 const config = require('config')
 const app = express()
+const handleAutoMomoRecharge = require('./cron_data/momoAndBank/momoRecharge')
 
 // Bodyparser Middleware
 app.use(express.json())
@@ -32,16 +33,22 @@ app.use('/api/users', require('./routes/api/users'))
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/fbmark', require('./routes/api/fbmark/actions'))
 app.use('/api/taikhoan', require('./routes/api/taikhoan/taikhoan'))
+
 // var runnaptien = require('./cron_data/runnaptien');
 var runmuasanpham = require('./cron_data/runmuasanpham')
 runmuasanpham()
-cron.schedule('* * * * * *', () => {
+
+handleAutoMomoRecharge()
+
+cron.schedule('* * * * *', () => {
 	try {
-		// runnaptien();
-	} catch (e) {
-		console.log(e)
+		// console.log('Hello everybody')
+		// handleAutoMomoRecharge()
+	} catch (err) {
+		console.log(err)
 	}
 })
+
 const port = process.env.PORT || 5000
 
 app.listen(port, () => console.log(`Server started on port ${port}`))
