@@ -24,7 +24,6 @@ const HistoryMomoSchema = new Schema({
 		default: Date.now,
 	},
 	status: {
-		//
 		type: String,
 		default: null,
 	},

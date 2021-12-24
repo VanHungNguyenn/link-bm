@@ -5,6 +5,7 @@ var cron = require('node-cron')
 const config = require('config')
 const app = express()
 const handleAutoMomoRecharge = require('./cron_data/momoAndBank/momoRecharge')
+const handleAutoBankRecharge = require('./cron_data/momoAndBank/bankRecharge')
 
 // Bodyparser Middleware
 app.use(express.json())
@@ -38,7 +39,8 @@ app.use('/api/taikhoan', require('./routes/api/taikhoan/taikhoan'))
 var runmuasanpham = require('./cron_data/runmuasanpham')
 runmuasanpham()
 
-handleAutoMomoRecharge()
+// handleAutoMomoRecharge()
+handleAutoBankRecharge()
 
 cron.schedule('* * * * *', () => {
 	try {
