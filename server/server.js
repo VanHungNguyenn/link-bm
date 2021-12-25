@@ -40,12 +40,12 @@ var runmuasanpham = require('./cron_data/runmuasanpham')
 runmuasanpham()
 
 // handleAutoMomoRecharge()
-handleAutoBankRecharge()
+// handleAutoBankRecharge()
 
 cron.schedule('* * * * *', () => {
 	try {
-		// console.log('Hello everybody')
-		// handleAutoMomoRecharge()
+		handleAutoMomoRecharge()
+		handleAutoBankRecharge()
 	} catch (err) {
 		console.log(err)
 	}

@@ -6,54 +6,6 @@ const LichSuNapTien = require('../../models/lichsunaptien')
 const MomoAndBankInfo = require('../../models/momoAndBankInfo')
 const config = require('config')
 
-const fakeAPI = [
-	{
-		CD: '+',
-		Reference: 'FT21358021682529',
-		TransID: 'FT21358021682529',
-		TransactionDate: '24/12/2021',
-		Amount: '1,000',
-		Description: 'tk24h Laughing / FT21358021682529',
-		CurrentBalance: 2486491,
-	},
-	{
-		CD: '+',
-		Reference: 'FT21358300176764',
-		TransID: 'FT21358300176764',
-		TransactionDate: '24/12/2021',
-		Amount: '1,000',
-		Description: 'tk24h vanhungnguyen / FT21358300176764',
-		CurrentBalance: 2485491,
-	},
-	{
-		CD: '-',
-		Reference: 'FT21357585160007',
-		TransID: 'FT21357585160007',
-		TransactionDate: '23/12/2021',
-		Amount: '-2,000,000',
-		Description: 'cho tien mua vay / FT21357585160007',
-		CurrentBalance: 2484491,
-	},
-	{
-		CD: '-',
-		Reference: 'FT21357849199420',
-		TransID: 'FT21357849199420',
-		TransactionDate: '23/12/2021',
-		Amount: '-11,835,000',
-		Description: '20307303590181998592 / FT21357849199420',
-		CurrentBalance: 4484491,
-	},
-	{
-		CD: '-',
-		Reference: 'FT21357624293100',
-		TransID: 'FT21357624293100',
-		TransactionDate: '23/12/2021',
-		Amount: '-150,000',
-		Description: 'nap2930 / FT21357624293100',
-		CurrentBalance: 16319491,
-	},
-]
-
 const handleAutoBankCharge = async () => {
 	try {
 		const account_bank = config.get('ACCOUNT_NUMBER_BANK')
@@ -64,13 +16,12 @@ const handleAutoBankCharge = async () => {
 			const API_BANK = x.api
 			const password_bank = x.password_bank
 
-			// const res = await axios.get(
-			// 	`https://api.web2m.com/historyapitcb/${password_bank}/${account_bank}/${API_BANK}`
-			// )
+			const res = await axios.get(
+				`https://api.web2m.com/historyapitcb/${password_bank}/${account_bank}/${API_BANK}`
+			)
 
-			// const { transactions } = res.data
+			const { transactions } = res.data
 
-			const transactions = fakeAPI
 			if (transactions.length > 0 && typeof transactions === 'object') {
 				for (let i = 0; i < transactions.length; i++) {
 					const transaction = transactions[i]
@@ -150,7 +101,7 @@ const handleAutoBankCharge = async () => {
 
 													await newHistoryBank.save()
 
-													await User.findOneAndUpdate(
+													await Users.findOneAndUpdate(
 														{
 															name: name,
 														},
