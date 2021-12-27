@@ -79,53 +79,74 @@ const handleAutoBankCharge = async () => {
 													depositMoney: depositMoney,
 												})
 
-											await newHistoryMomo.save()
+											await newHistoryBank.save()
 										} else {
 											const user = comment.split(' ')[1]
 
-											User.findOne({ name: user }).then(
+											Users.findOne({ name: user }).then(
 												async (client) => {
-													const { _id, name } = client
-
-													const newHistoryBank =
-														new HistoryBank({
-															id_transaction:
-																tranId,
-															id_user: _id,
-															name_user: name,
-															depositMoney:
-																depositMoney,
-															status: 'Giao dịch tk24h thành công',
-															comment: comment,
-														})
-
-													await newHistoryBank.save()
-
-													await Users.findOneAndUpdate(
-														{
-															name: name,
-														},
-														{
-															$inc: {
-																balance:
-																	depositMoney,
-																tongtiennap:
-																	depositMoney,
-															},
-														}
-													).then(async () => {
-														const newLichSuNapTien =
-															new LichSuNapTien({
-																id_user: _id,
-																name_user: name,
-																noidung:
-																	'Nạp tiền tự động bằng bank',
-																tien_nap:
+													if (!client) {
+														const newHistoryBank =
+															new HistoryBank({
+																id_transaction:
+																	tranId,
+																status: 'Giao dịch của tk24h, nhưng không tìm thấy tài khoản',
+																comment:
+																	comment,
+																depositMoney:
 																	depositMoney,
 															})
 
-														await newLichSuNapTien.save()
-													})
+														await newHistoryBank.save()
+													} else {
+														const { _id, name } =
+															client
+
+														const newHistoryBank =
+															new HistoryBank({
+																id_transaction:
+																	tranId,
+																id_user: _id,
+																name_user: name,
+																depositMoney:
+																	depositMoney,
+																status: 'Giao dịch tk24h thành công',
+																comment:
+																	comment,
+															})
+
+														await newHistoryBank.save()
+
+														await Users.findOneAndUpdate(
+															{
+																name: name,
+															},
+															{
+																$inc: {
+																	balance:
+																		depositMoney,
+																	tongtiennap:
+																		depositMoney,
+																},
+															}
+														).then(async () => {
+															const newLichSuNapTien =
+																new LichSuNapTien(
+																	{
+																		id_user:
+																			_id,
+																		name_user:
+																			name,
+																		noidung:
+																			'Nạp tiền tự động bằng bank',
+																		tien_nap:
+																			depositMoney,
+																	}
+																)
+
+															await newLichSuNapTien.save()
+														})
+													}
 												}
 											)
 										}

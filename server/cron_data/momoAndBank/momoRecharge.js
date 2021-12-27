@@ -60,47 +60,68 @@ const handleAutoMomoRecharge = async () => {
 
 											Users.findOne({ name: user }).then(
 												async (client) => {
-													const { _id, name } = client
-
-													const newHistoryMomo =
-														new HistoryMomo({
-															id_transaction:
-																tranId,
-															id_user: _id,
-															name_user: name,
-															depositMoney:
-																depositMoney,
-															status: 'Giao dịch tk24h thành công',
-															comment: comment,
-														})
-
-													await newHistoryMomo.save()
-
-													await User.findOneAndUpdate(
-														{
-															name: name,
-														},
-														{
-															$inc: {
-																balance:
-																	depositMoney,
-																tongtiennap:
-																	depositMoney,
-															},
-														}
-													).then(async () => {
-														const newLichSuNapTien =
-															new LichSuNapTien({
-																id_user: _id,
-																name_user: name,
-																noidung:
-																	'Nạp tiền tự động bằng Momo',
-																tien_nap:
+													if (!client) {
+														const newHistoryMomo =
+															new HistoryMomo({
+																id_transaction:
+																	tranId,
+																status: 'Giao dịch của tk24h, nhưng không tìm thấy tài khoản',
+																comment:
+																	comment,
+																depositMoney:
 																	depositMoney,
 															})
 
-														await newLichSuNapTien.save()
-													})
+														await newHistoryMomo.save()
+													} else {
+														const { _id, name } =
+															client
+
+														const newHistoryMomo =
+															new HistoryMomo({
+																id_transaction:
+																	tranId,
+																id_user: _id,
+																name_user: name,
+																depositMoney:
+																	depositMoney,
+																status: 'Giao dịch tk24h thành công',
+																comment:
+																	comment,
+															})
+
+														await newHistoryMomo.save()
+
+														await User.findOneAndUpdate(
+															{
+																name: name,
+															},
+															{
+																$inc: {
+																	balance:
+																		depositMoney,
+																	tongtiennap:
+																		depositMoney,
+																},
+															}
+														).then(async () => {
+															const newLichSuNapTien =
+																new LichSuNapTien(
+																	{
+																		id_user:
+																			_id,
+																		name_user:
+																			name,
+																		noidung:
+																			'Nạp tiền tự động bằng Momo',
+																		tien_nap:
+																			depositMoney,
+																	}
+																)
+
+															await newLichSuNapTien.save()
+														})
+													}
 												}
 											)
 										}
