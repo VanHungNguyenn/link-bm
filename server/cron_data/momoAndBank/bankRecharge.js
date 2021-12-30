@@ -21,6 +21,9 @@ const handleAutoBankCharge = async () => {
 			)
 
 			const { transactions } = res.data
+			if (!transactions) {
+				return
+			}
 
 			if (transactions.length > 0 && typeof transactions === 'object') {
 				for (let i = 0; i < transactions.length; i++) {
@@ -158,7 +161,7 @@ const handleAutoBankCharge = async () => {
 			}
 		})
 	} catch (error) {
-		console.log(error.message)
+		console.log('Bank: ', error.message)
 	}
 }
 

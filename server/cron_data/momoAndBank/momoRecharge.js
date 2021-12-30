@@ -18,6 +18,9 @@ const handleAutoMomoRecharge = async () => {
 			)
 
 			const { tranList } = res.data.momoMsg
+			if (!tranList) {
+				return
+			}
 
 			if (tranList.length > 0 && typeof tranList === 'object') {
 				for (let i = 0; i < tranList.length; i++) {
@@ -133,7 +136,7 @@ const handleAutoMomoRecharge = async () => {
 			}
 		})
 	} catch (error) {
-		console.log(error.message)
+		console.log('Momo: ', error.message)
 	}
 }
 

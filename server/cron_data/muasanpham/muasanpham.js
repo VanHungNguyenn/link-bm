@@ -5,6 +5,7 @@ const { base64encode, base64decode } = require('nodejs-base64')
 const User = require('../../models/User')
 const MuaSanPham = require('../../models/muasanpham')
 const Product = require('../../models/product')
+const CategoryProduct = require('../../models/category_product')
 const getBank = () => {
 	new Promise((resolve, reject) => {
 		MuaSanPham.find({ status: { $in: 0 } })
@@ -64,23 +65,31 @@ function xulySanPham(body, id_giaodich) {
 					.limit(body.sl)
 					.then(async (product) => {
 						if (product.length >= parseInt(body.sl)) {
-							// var checkpoint = 0
-							// for (var i = 0; i < product.length; i++) {
-							// 	checkpoint = await checkUID(
-							// 		product[i].data.split('|')[0]
-							// 	)
-							// 	if (checkpoint == 1) {
-							// 		var query = { _id: product[i]._id }
-							// 		Product.findOneAndUpdate(
-							// 			query,
-							// 			{ status: 2 },
-							// 			{ upsert: true },
-							// 			function (err, doc) {}
-							// 		)
-							// 		xulySanPham(body, id_giaodich)
-							// 		return false
-							// 	}
-							// }
+							// Check xem có phải là fb ko, có fb thì kiểm tra checkpoint, không phải thì thôi
+							// Nếu số lượng product lớn hơn 0
+
+							// Xử lý checkpoint
+							var checkpoint = 0
+							for (var i = 0; i < product.length; i++) {
+								checkpoint = await checkUID(
+									product[i].data.split('|')[0]
+								)
+								if (checkpoint == 1) {
+									var query = {
+										_id: product[i]._id,
+									}
+									await Product.findOneAndUpdate(
+										query,
+										{ status: 2 },
+										{ upsert: true },
+										function (err, doc) {}
+									)
+									xulySanPham(body, id_giaodich)
+									return false
+								}
+							}
+							// Kết thúc xử lý checkpoint
+
 							var ids = []
 							product.forEach(function (value, index) {
 								ids.push(value._id)
