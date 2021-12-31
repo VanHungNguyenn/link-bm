@@ -352,6 +352,9 @@ class Bm extends Component {
 					<table className='table table-striped table-bordered table-hover table-sm'>
 						<thead className='thead-light'>
 							<tr>
+								<th scope='col' style={{ width: 50 }}>
+									Id
+								</th>
 								<th scope='col'>Tên sản phẩm</th>
 								{/* <th scope='col' style={{ width: 80 }}>
 									Type
@@ -359,7 +362,7 @@ class Bm extends Component {
 								<th scope='col' style={{ width: 80 }}>
 									Quốc gia
 								</th>
-								<th scope='col' style={{ width: 100 }}>
+								<th scope='col' style={{ width: 80 }}>
 									Hiện có
 								</th>
 								<th scope='col' style={{ width: 80 }}>
@@ -382,26 +385,47 @@ class Bm extends Component {
 								if (value.type == 'VIA') {
 									var name_input_soluongmua =
 										'soluongmua_' + index
+
+									console.log(value)
+
 									return (
-										<tr>
-											<th scope='row'>
-												{value.icon ? (
-													<img
-														style={{
-															width: 20,
-														}}
-														src={
-															iconList[
-																renderIcon(
-																	value.icon
-																)
-															].image
-														}
-														alt='logo'
-													/>
-												) : null}{' '}
-												{value.name}
-											</th>
+										<tr key={index}>
+											<td>
+												<span>
+													{value.number_order}
+												</span>
+											</td>
+
+											<td scope='row'>
+												<h4
+													style={{
+														fontSize: '16px',
+														display: 'flex',
+														alignItems: 'center',
+														marginBottom: 0,
+														fontWeight: 400,
+													}}
+												>
+													{value.icon ? (
+														<img
+															style={{
+																width: 20,
+																marginRight:
+																	'5px',
+															}}
+															src={
+																iconList[
+																	renderIcon(
+																		value.icon
+																	)
+																].image
+															}
+															alt='logo'
+														/>
+													) : null}{' '}
+													{value.name}
+												</h4>
+											</td>
 
 											<td>
 												<span
@@ -452,7 +476,7 @@ class Bm extends Component {
 													>
 														<ShoppingCartOutlined
 															style={{
-																'font-size':
+																fontSize:
 																	'16px',
 																verticalAlign:
 																	'0.125em',
@@ -484,7 +508,7 @@ class Bm extends Component {
 					<table className='table table-striped table-bordered table-hover table-sm'>
 						<thead className='thead-light'>
 							<tr>
-								<th scope='col' style={{ width: 120 }}>
+								<th scope='col' style={{ width: 160 }}>
 									Người mua
 								</th>
 
@@ -549,7 +573,7 @@ class Bm extends Component {
 					<table className='table table-striped table-bordered table-hover table-sm'>
 						<thead className='thead-light'>
 							<tr>
-								<th scope='col' style={{ width: 120 }}>
+								<th scope='col' style={{ width: 160 }}>
 									Người mua
 								</th>
 
@@ -622,6 +646,12 @@ class Bm extends Component {
 					className='content custom_content'
 					style={{ paddingTop: '0px' }}
 				>
+					<h2 style={{ textAlign: 'center' }}>DANH SÁCH TÀI KHOẢN</h2>
+					<p style={{ textAlign: 'center', fontStyle: 'italic' }}>
+						TK24H.COM cung cấp tài khoản quảng cáo Facebook: Tài
+						khoản Doanh nghiệp (BM50, BM350) - Tài khoản Cá nhân
+						(VIA, CLONE) - Mail verify (HOTMAIL, GMAIL)
+					</p>
 					<div className='card'>
 						<div className='card-header'>
 							<h3 className='card-title'>
@@ -685,6 +715,20 @@ class Bm extends Component {
 										</a>{' '}
 										để hạn chế checkpoint vì acc khi xuất ra
 										đã check live trước khi xuất!
+									</li>
+									<li>
+										Vui lòng đọc kỹ chính sách bảo hành
+										trước khi mua tài khoản trên hệ thống
+										TK24H.com. Mọi trường hợp cố tình gian
+										lận bảo hành sẽ bị khoá tài khoản trên
+										hệ thống vĩnh viễn.
+									</li>
+									<li>
+										Tất cả tài nguyên trên website chỉ phục
+										vụ với mục đích QUẢNG CÁO. Tất cả hành
+										vi sử dụng vi phạm nào trái pháp luật
+										Việt Nam, chúng tôi đều không chịu bất
+										cứ trách nhiệm nào!
 									</li>
 								</ul>
 							</div>

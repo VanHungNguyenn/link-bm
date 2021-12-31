@@ -54,8 +54,8 @@ class AppNavbar extends Component {
 			<Fragment>
 				{comp}
 				<MessengerCustomerChat
-					pageId='104192042124971'
-					appId='957747331501187'
+					pageId='103014442260353'
+					appId='323695346239067'
 				/>
 			</Fragment>
 		)

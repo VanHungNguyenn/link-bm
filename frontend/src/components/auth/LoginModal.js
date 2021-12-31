@@ -134,7 +134,7 @@ class LoginModal extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='#'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						id='tabKey'
 						onClick={() => {
@@ -150,7 +150,7 @@ class LoginModal extends Component {
 				<li className='nav-item dropdown'>
 					<Link
 						to='/'
-						activeClassName='active'
+						// activeClassName='active'
 						id='contact'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
@@ -171,21 +171,27 @@ class LoginModal extends Component {
 						<a
 							rel='noopener noreferrer'
 							className='dropdown-item'
-							href={notifi.link_group_fb}
+							// href={notifi.link_group_fb}
+							href='https://www.facebook.com/groups/1151714455363837'
+							target='_blank'
 						>
 							Vào nhóm facebook
 						</a>
 						<a
 							rel='noopener noreferrer'
 							className='dropdown-item'
-							href={notifi.link_group_zalo}
+							// href={notifi.link_group_zalo}
+							href='https://zalo.me/g/jwxpuj071'
+							target='_blank'
 						>
 							Vào nhóm zalo
 						</a>
 						<a
 							rel='noopener noreferrer'
 							className='dropdown-item'
-							href={notifi.link_group_tele}
+							// href={notifi.link_group_tele}
+							href='https://t.me/hotrotk24h/2'
+							target='_blank'
 						>
 							Vào nhóm tele
 						</a>
@@ -204,6 +210,11 @@ class LoginModal extends Component {
 		var formLogin = (
 			<Router>
 				<Fragment>
+					<h1 style={{ fontSize: '25px', textAlign: 'center' }}>
+						HỆ THỐNG TK24H.COM MUA BÁN TÀI KHOẢN QUẢNG CÁO (VIA,
+						CLONE, BM, HOTMAIL, GMAIL...) FACEBOOK GIÁ RẺ, UY TÍN
+						NHẤT VIỆT NAM
+					</h1>
 					<div className='block block-rounded block-bordered'>
 						<div className='block-header block-header-default'>
 							<h3 className='block-title'>Đăng nhập</h3>

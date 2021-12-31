@@ -165,7 +165,7 @@ class LichSuMua extends Component {
 		var listproduct = (
 			<Fragment>
 				{viewProduct.map(function (value, index) {
-					return <li>{value.data}</li>
+					return <li key={index}>{value.data}</li>
 				})}
 			</Fragment>
 		)

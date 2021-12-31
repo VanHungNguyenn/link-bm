@@ -30,6 +30,11 @@ const CategoryProductSchema = new Schema({
 		type: Date,
 		default: Date.now,
 	},
+	number_order: {
+		type: Number,
+		required: true,
+		unique: true,
+	},
 })
 
 module.exports = CategoryProduct = mongoose.model(

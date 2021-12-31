@@ -21,11 +21,25 @@ const handleAutoBankCharge = async () => {
 			)
 
 			const { transactions } = res.data
+
+			//Test
+			// const transactions = [
+			// 	{
+			// 		CD: '+',
+			// 		Reference: 'FT21364237408875',
+			// 		TransID: 'FT21364237408872',
+			// 		TransactionDate: '30/12/2021',
+			// 		Amount: '1,000',
+			// 		Description: 'tk24h vanhungnguyen / FT21364237408876',
+			// 		CurrentBalance: 9258709,
+			// 	},
+			// ]
+
 			if (!transactions) {
 				return
 			}
 
-			if (transactions.length > 0 && typeof transactions === 'object') {
+			if (transactions.length > 0) {
 				for (let i = 0; i < transactions.length; i++) {
 					const transaction = transactions[i]
 					const CD = transaction.CD
@@ -33,8 +47,9 @@ const handleAutoBankCharge = async () => {
 					const comment = transaction.Description.split('/')[0]
 						.toLowerCase()
 						.trim()
+
 					const depositMoney = Number(
-						transaction.Amount.replaceAll(',', '')
+						transaction.Amount.replace(/,/g, '')
 					)
 
 					if (CD === '-') {

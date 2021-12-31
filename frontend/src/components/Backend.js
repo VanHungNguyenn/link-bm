@@ -170,7 +170,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/user'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						id='tabKey'
 						onClick={() => {
@@ -191,7 +191,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/loaisanpham'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -211,7 +211,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/sanpham'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -231,7 +231,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/sanphamloi'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -251,7 +251,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/historybuy'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -271,7 +271,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/historydeposit'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -291,7 +291,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/tongdoanhthu'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -311,7 +311,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/admin/notifi'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							store.dispatch(loadUser())
@@ -333,7 +333,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						id='tabKey'
 						onClick={() => {
@@ -355,7 +355,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/naptien'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							this.dropdownMenu('')
@@ -376,7 +376,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/historybuy'
-						activeClassName='active'
+						// activeClassName='active'
 						id='lichsumua'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
@@ -398,7 +398,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/historydeposit'
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							this.dropdownMenu('')
@@ -419,7 +419,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/checkbm'
-						activeClassName='active'
+						// activeClassName='active'
 						id='checkbm'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
@@ -441,7 +441,7 @@ class Index extends Component {
 				<li className='nav-item'>
 					<NavLink
 						to='/getotp'
-						activeClassName='active'
+						// activeClassName='active'
 						id='checkbm'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
@@ -482,7 +482,7 @@ class Index extends Component {
 				</li> */}
 				<li className='nav-item dropdown'>
 					<Link
-						activeClassName='active'
+						// activeClassName='active'
 						id='contact'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
@@ -503,21 +503,27 @@ class Index extends Component {
 						<a
 							rel='noopener noreferrer'
 							className='dropdown-item'
-							href={notifi.link_group_fb}
+							// href={notifi.link_group_fb}
+							href='https://www.facebook.com/groups/1151714455363837'
+							target='_blank'
 						>
 							Vào nhóm facebook
 						</a>
 						<a
 							rel='noopener noreferrer'
 							className='dropdown-item'
-							href={notifi.link_group_zalo}
+							// href={notifi.link_group_zalo}
+							href='https://zalo.me/g/jwxpuj071'
+							target='_blank'
 						>
 							Vào nhóm zalo
 						</a>
 						<a
 							rel='noopener noreferrer'
 							className='dropdown-item'
-							href={notifi.link_group_tele}
+							// href={notifi.link_group_tele}
+							href='https://t.me/hotrotk24h/2'
+							target='_blank'
 						>
 							Vào nhóm tele
 						</a>
@@ -532,7 +538,7 @@ class Index extends Component {
 				</li>
 				<li className='nav-item'>
 					<div
-						activeClassName='active'
+						// activeClassName='active'
 						className='nav-link text-body-color py-4'
 					>
 						<i className='nav-main-link-icon si si-wallet text-gray'></i>
@@ -568,6 +574,7 @@ class Index extends Component {
 				</span>
 			)
 		}
+
 		return (
 			<Router>
 				<Fragment>
@@ -590,6 +597,7 @@ class Index extends Component {
 								<div>
 									<div className='dropdown d-inline-block'>
 										<Link
+											to=''
 											className='btn btn-dual'
 											id='page-header-user-dropdown'
 											aria-haspopup='true'
@@ -629,8 +637,9 @@ class Index extends Component {
 													alt=''
 												/>
 												<div className='pt-2'></div>
+												Username:{' '}
 												<a
-													className='font-w600 text-dark'
+													className='font-w600 text-blue'
 													href='#'
 												>
 													{user.name}
@@ -852,7 +861,7 @@ class Index extends Component {
 											data-toggle='year-copy'
 											className='js-year-copy-enabled'
 										>
-											2021
+											2022
 										</span>
 									</div>
 								</div>

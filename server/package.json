@@ -39,6 +39,5 @@
 		"socket.io": "^2.4.1",
 		"socket.io-client": "^2.3.0",
 		"styled-components": "^5.0.1"
-	},
-	"devDependencies": {}
+	}
 }

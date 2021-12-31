@@ -336,7 +336,7 @@ class LoaiSanPham extends Component {
 								</button>
 								<button
 									className='btn btn-danger'
-									style={{ 'margin-left': '5px' }}
+									style={{ marginLeft: '5px' }}
 									onClick={() => {
 										this.deleteCategory()
 									}}

@@ -4,13 +4,14 @@ const bcrypt = require('bcryptjs')
 const config = require('config')
 const jwt = require('jsonwebtoken')
 var suid = require('rand-token').suid
+const createKey = require('bcrypt')
 // User Model
 const User = require('../../models/User')
 
 // @route POST api/users
 // @desc Register new user
 // @access Public
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 	try {
 		var { name, phone, password, repeatpassword } = req.body
 		// Simple validation
@@ -45,6 +46,8 @@ router.post('/', (req, res) => {
 			}
 		})
 
+		const key = await createKey.hash(name, 12)
+
 		const newUser = new User({
 			name,
 			phone,
@@ -53,6 +56,7 @@ router.post('/', (req, res) => {
 			token: suid(16),
 			role: 2,
 			balance: 0,
+			key,
 		})
 
 		// Create salt & hash

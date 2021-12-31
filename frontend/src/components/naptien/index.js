@@ -84,7 +84,7 @@ class NapTien extends Component {
 												<button
 													className='btn btn-success'
 													style={{
-														'margin-left': '3px',
+														marginLeft: '3px',
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienVCB(
@@ -101,7 +101,7 @@ class NapTien extends Component {
 												<button
 													className='btn btn-warning'
 													style={{
-														'margin-left': '3px',
+														marginLeft: '3px',
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienVCB(
@@ -171,7 +171,7 @@ class NapTien extends Component {
 												<button
 													className='btn btn-success'
 													style={{
-														'margin-left': '3px',
+														marginLeft: '3px',
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienMomo(
@@ -188,7 +188,7 @@ class NapTien extends Component {
 												<button
 													className='btn btn-warning'
 													style={{
-														'margin-left': '3px',
+														marginLeft: '3px',
 													}}
 													onClick={() => {
 														this.copyToClipboardNapTienMomo(

@@ -5,7 +5,6 @@ const config = require('config')
 const axios = require('axios')
 const jwt = require('jsonwebtoken')
 const auth = require('../../../middleware/auth')
-const authAuto = require('../../../middleware/authAuto')
 const CryptoJS = require('crypto-js')
 
 // User Model
@@ -549,9 +548,26 @@ function isNumeric(str) {
 	) // ...and ensure strings of whitespace fail
 }
 
-router.post('/buyproductauto', authAuto, async (req, res) => {
+router.post('/buy_product_auto', async (req, res) => {
 	try {
-		const { id_category, user_name, sl } = req.body
+		const { id, sl } = req.body
+		const { key } = req.params
+
+		console.log({ key })
+
+		const san_pham = await CategoryProduct.findOne({ number_order: id })
+
+		if (!san_pham) {
+			return res.status(400).json({ msg: 'Sản phẩm này không tồn tại' })
+		}
+
+		// Lấy id của sản phẩm
+		const id_category = sanpham._id
+		console.log(id_category)
+
+		return
+
+		const user_name = ''
 
 		if (typeof sl === 'undefined') {
 			return res.status(400).json({ msg: 'Nhập số lượng bạn muốn mua.' })
@@ -577,8 +593,6 @@ router.post('/buyproductauto', authAuto, async (req, res) => {
 		await Product.countDocuments(sql_find).then((count_product) => {
 			live_count = count_product
 		})
-
-		console.log(live_count)
 
 		if (live_count <= 0) {
 			return res.status(400).json({ msg: 'Đã hết sản phẩm.' })
@@ -761,7 +775,7 @@ router.post('/buyproduct', auth, (req, res) => {
 router.get('/categoryproduct', (req, res) => {
 	try {
 		CategoryProduct.find()
-			.sort({ date: -1 })
+			.sort({ date: 1 })
 			.then(async (categoryproduct) => {
 				var new_categoryproduct = []
 				if (categoryproduct.length > 0) {
@@ -804,6 +818,7 @@ router.get('/categoryproduct', (req, res) => {
 							__v: categoryproduct[i].__v,
 							live_count: live_count,
 							sold_count: sold_count,
+							number_order: categoryproduct[i].number_order,
 						}
 						new_categoryproduct.push(new_categoryproduct_tmp)
 					}
@@ -820,7 +835,7 @@ router.get('/categoryproduct', (req, res) => {
 router.post('/addcategoryproduct', auth, (req, res) => {
 	try {
 		User.findById(req.user.id)
-			.then((useradmin) => {
+			.then(async (useradmin) => {
 				if (useradmin.role == 1) {
 					if (req.body.name == '' || req.body.name == null) {
 						return res.send({
@@ -864,6 +879,18 @@ router.post('/addcategoryproduct', auth, (req, res) => {
 						})
 					}
 
+					const lastCategory = await CategoryProduct.find()
+						.sort({ date: -1 })
+						.limit(1)
+
+					let lastNumberOrder = 0
+
+					if (lastCategory.length > 0) {
+						lastNumberOrder = lastCategory[0].number_order
+					}
+
+					const number_order = Number(lastNumberOrder) + 1
+
 					if (req.body.id_category === '') {
 						const newCategoryProduct = new CategoryProduct({
 							name: req.body.name,
@@ -872,6 +899,7 @@ router.post('/addcategoryproduct', auth, (req, res) => {
 							type: req.body.type,
 							country: req.body.country,
 							icon: req.body.icon,
+							number_order,
 						})
 						newCategoryProduct.save().then((setting) => {
 							res.json({
@@ -911,10 +939,10 @@ router.post('/addcategoryproduct', auth, (req, res) => {
 				}
 			})
 			.catch(function (error) {
-				res.send({ error: 400, msg: 'Có lỗi xảy ra' })
+				res.send({ error: 400, msg: error.message })
 			})
 	} catch (e) {
-		res.status(400).json({ status: 400, msg: 'Đã có lỗi xảy ra' })
+		res.status(400).json({ status: 400, msg: e.message })
 	}
 })
 

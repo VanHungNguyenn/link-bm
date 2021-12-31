@@ -1,54 +1,58 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 // Create Schema
 const UserSchema = new Schema({
 	name: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
+	},
+	key: {
+		type: String,
+		required: true,
 	},
 	stt: {
 		type: String,
-		default: 0
+		default: 0,
 	},
 	id_fb: {
 		type: String,
-		default: null
+		default: null,
 	},
 	password: {
 		type: String,
-		required: true
+		required: true,
 	},
 	phone: {
 		type: String,
-		default: null
+		default: null,
 	},
 	role: {
 		type: Number,
 	},
 	balance: {
-		type: Number
+		type: Number,
 	},
 	tongtiennap: {
 		type: Number,
-		default: 0
+		default: 0,
 	},
 	tongtienmua: {
 		type: String,
-		default: 0
+		default: 0,
 	},
 	data: {
-		type: Array
+		type: Array,
 	},
 	token: {
 		type: String,
-		required: true 
+		required: true,
 	},
 	date: {
 		type: Date,
-		default: Date.now
-	}
-});
+		default: Date.now,
+	},
+})
 
-module.exports = User = mongoose.model('user', UserSchema);
+module.exports = User = mongoose.model('user', UserSchema)

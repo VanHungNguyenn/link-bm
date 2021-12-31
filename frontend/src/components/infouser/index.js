@@ -34,7 +34,8 @@ class info_user extends Component {
 	}
 
 	render() {
-		const { name } = this.props.auth.user
+		const { name, key } = this.props.auth.user
+
 		const { phone, old_pass, new_pass, re_pass } = this.props.auth.edituser
 		return (
 			<Fragment>
@@ -44,6 +45,11 @@ class info_user extends Component {
 							<h3 className='block-title'>Thông tin cá nhân</h3>
 						</div>
 						<div className='block-content'>
+							<p>
+								<b>Secret key: </b>
+								<span>{key}</span>
+							</p>
+
 							<div className='row form-group'>
 								<div className='col-md-4'>
 									<label className='mt-2'>
