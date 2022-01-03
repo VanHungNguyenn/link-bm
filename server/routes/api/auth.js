@@ -3,6 +3,7 @@ const router = express.Router()
 const bcrypt = require('bcryptjs')
 const config = require('config')
 const jwt = require('jsonwebtoken')
+const createKey = require('bcrypt')
 const auth = require('../../middleware/auth')
 
 // User Model
@@ -31,11 +32,17 @@ router.post('/', (req, res) => {
 			}
 
 			// Validate password
-			bcrypt.compare(password, user.password).then((isMatch) => {
+			bcrypt.compare(password, user.password).then(async (isMatch) => {
 				if (!isMatch)
 					return res
 						.status(400)
 						.json({ msg: 'Tài khoản hoặc mật khẩu không đúng' })
+
+				const nguoi_dung = await User.findOne({ name })
+				if (!nguoi_dung.key) {
+					const key = await createKey.hash(name, 12)
+					await User.findOneAndUpdate({ name }, key)
+				}
 
 				jwt.sign(
 					{

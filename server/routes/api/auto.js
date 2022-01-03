@@ -139,6 +139,7 @@ async function handleBuyProducts(id_category, user_name, sl, res) {
 												sl,
 												res
 											)
+											return false
 										}
 									}
 
