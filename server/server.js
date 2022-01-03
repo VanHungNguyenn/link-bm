@@ -34,6 +34,7 @@ app.use('/api/users', require('./routes/api/users'))
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/fbmark', require('./routes/api/fbmark/actions'))
 app.use('/api/taikhoan', require('./routes/api/taikhoan/taikhoan'))
+app.use('/api/auto', require('./routes/api/auto'))
 
 // var runnaptien = require('./cron_data/runnaptien');
 var runmuasanpham = require('./cron_data/runmuasanpham')

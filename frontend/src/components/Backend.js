@@ -40,6 +40,7 @@ import InfoUser from './infouser/'
 import SoDu from './sodu/'
 import LienHe from './lienhe/index'
 import LichSu from './lichsu/index'
+import GetAPI from './getAPI'
 
 import AdminLichSuMua from './admin/lichsumua/'
 import AdminLichSuNap from './admin/lichsunaptien/'
@@ -371,6 +372,26 @@ class Index extends Component {
 						<span className='d-none d-md-inline ml-1'>
 							Nạp tiền
 						</span>
+					</NavLink>
+				</li>
+				<li className='nav-item'>
+					<NavLink
+						to='/api'
+						// activeClassName='active'
+						id='api'
+						className='nav-link text-body-color py-4'
+						// onClick={() => {
+						// 	this.dropdownMenu('')
+						// 	store.dispatch(loadUser())
+						// 	if (isMobile) {
+						// 		this.onClickSidebar(
+						// 			this.props.auth.isOpenSidebar
+						// 		)
+						// 	}
+						// }}
+					>
+						<i className='nav-main-link-icon fas fa-tape text-gray'></i>
+						<span className='d-none d-md-inline ml-1'>API</span>
 					</NavLink>
 				</li>
 				<li className='nav-item'>
@@ -751,6 +772,12 @@ class Index extends Component {
 								{this.state.adminAdtive === false && (
 									<Route exact path='/getotp'>
 										<GetOtp />
+									</Route>
+								)}
+								{this.state.adminAdtive === false && (
+									<Route exact path='/api'>
+										{/* <GetOtp /> */}
+										<GetAPI />
 									</Route>
 								)}
 								{this.state.adminAdtive === false && (
