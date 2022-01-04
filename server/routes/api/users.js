@@ -18,6 +18,12 @@ router.post('/', async (req, res) => {
 		name = name.replace(/ /g, '').toLowerCase()
 		//Check name contains special symbol? no => null, yes => [symbols]
 		var match_username = name.match(/[^a-z0-9]+/g)
+		if (name.length <= 6) {
+			return res.status(400).json({
+				msg: 'Tên tài khoản phải nhiều hơn 6 kí tự',
+			})
+		}
+
 		if (match_username !== null) {
 			return res.status(400).json({
 				msg: 'Tên tài khoản chỉ bao gồm các kí tự a-z, 0-9',

@@ -11,6 +11,20 @@ import { ShoppingCartOutlined } from '@ant-design/icons'
 import iconList from '../../../config/icon'
 import { timeAgo } from '../../../utils/timeAgo'
 
+const hideName = (name) => {
+	let newName = ''
+	const nameLength = name.length
+	for (let i = 0; i < nameLength; i++) {
+		if (i > nameLength - 5) {
+			newName += '*'
+		} else {
+			newName += name[i]
+		}
+	}
+
+	return newName
+}
+
 const humanized_time_span = (date, ref_date, date_formats, time_units) => {
 	//Date Formats must be be ordered smallest -> largest and must end in a format with ceiling of null
 	date_formats = date_formats || {
@@ -532,7 +546,9 @@ class Bm extends Component {
 												verticalAlign: 'middle',
 											}}
 										>
-											{item.user_name}
+											{hideName(item.user_name)
+												? hideName(item.user_name)
+												: item.user_name}
 										</th>
 
 										<td
@@ -594,7 +610,9 @@ class Bm extends Component {
 												verticalAlign: 'middle',
 											}}
 										>
-											{item.name_user}
+											{hideName(item.name_user)
+												? hideName(item.name_user)
+												: item.name_user}
 										</th>
 
 										<td

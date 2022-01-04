@@ -38,11 +38,15 @@ router.post('/', (req, res) => {
 						.status(400)
 						.json({ msg: 'Tài khoản hoặc mật khẩu không đúng' })
 
-				const nguoi_dung = await User.findOne({ name })
-				if (!nguoi_dung.key) {
-					const key = await createKey.hash(name, 12)
-					await User.findOneAndUpdate({ name }, key)
-				}
+				await User.findOne({ name }).then(async (nguoi_dung) => {
+					{
+						if (!nguoi_dung.key) {
+							const key = await createKey.hash(name, 12)
+
+							await User.findOneAndUpdate({ name }, { key })
+						}
+					}
+				})
 
 				jwt.sign(
 					{
