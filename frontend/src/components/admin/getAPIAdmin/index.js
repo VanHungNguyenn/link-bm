@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import columnAPI from './columnAPI'
 
-function GetAPI(props) {
+function GetAPIAdmin(props) {
 	const user = useSelector((state) => state.auth.user)
 
 	return (
@@ -69,9 +69,27 @@ function GetAPI(props) {
 								defaultValue='http://tk24h.com/api/auto/check_amount?id=<ID>'
 							/>
 						</div>
+						<h6
+							style={{
+								marginBottom: 10,
+							}}
+						>
+							Thêm sản phẩm:{' '}
+						</h6>
+						<div className='input-group mb-3'>
+							<span className='input-group-text'>GET: </span>
+							<input
+								type='text'
+								className='form-control'
+								placeholder='Add product'
+								aria-label='AddProduct'
+								disabled
+								defaultValue='http://tk24h.com/api/auto/add_product?key=<KEY>&id=<ID>&data=<DATA>'
+							/>
+						</div>
 						<div
 							className='table-responsive'
-							style={{ marginTop: 20 }}
+							style={{ marginTop: 50 }}
 						>
 							<table className='table table-striped table-bordered table-hover table-sm'>
 								<thead className='thead-light'>
@@ -119,4 +137,4 @@ function GetAPI(props) {
 	)
 }
 
-export default GetAPI
+export default GetAPIAdmin

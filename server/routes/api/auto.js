@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const axios = require('axios')
 var request = require('request')
+const authKey = require('../../middleware/authKey')
+require('dotenv').config()
 
 // User Model
 const CategoryProduct = require('../../models/category_product')
@@ -222,9 +223,13 @@ async function handleBuyProducts(id_category, user_name, sl, res) {
 	}
 }
 
-router.post('/buy_product', async (req, res) => {
+router.get('/buy_product', async (req, res) => {
 	try {
 		const { key, id, sl } = req.query
+
+		if (!key || !id || !sl) {
+			return res.status(400).json({ msg: 'Information is not provided' })
+		}
 
 		const nguoi_dung = await User.findOne({ key })
 		if (!nguoi_dung) {
@@ -248,6 +253,138 @@ router.post('/buy_product', async (req, res) => {
 		res.status(final.status).json(final.result)
 	} catch (err) {
 		res.status(500).json({ msg: err.message })
+	}
+})
+
+router.get('/check_balance', async (req, res) => {
+	try {
+		const { key } = req.query
+
+		if (!key) {
+			return res.status(400).json({ msg: 'Key is not provided' })
+		}
+
+		const nguoi_dung = await User.findOne({ key })
+		if (!nguoi_dung) {
+			return res.status(400).json({ msg: 'This user does not exist' })
+		}
+
+		const balance = nguoi_dung.balance
+		const user_name = nguoi_dung.name
+
+		res.status(200).json({ user_name, balance })
+	} catch (error) {
+		res.status(500).json({ msg: error.message })
+	}
+})
+
+router.get('/check_amount', async (req, res) => {
+	try {
+		const { id } = req.query
+
+		if (!id) {
+			return res.status(400).json({ msg: 'Information is not provided' })
+		}
+
+		const san_pham = await CategoryProduct.findOne({ number_order: id })
+
+		if (!san_pham) {
+			return res.status(400).json({ msg: 'This product does not exist' })
+		}
+
+		const sql_find = {
+			sell: { $in: 0 }, // 0: chua ban, 1: da ban
+			status: { $in: 1 },
+			id_loaisp: { $in: san_pham._id },
+		}
+
+		const name_product = san_pham.name
+		let live_count = 0
+
+		await Product.countDocuments(sql_find).then((count_products) => {
+			live_count = count_products
+		})
+
+		res.status(200).json({ name_product, live_count })
+	} catch (error) {
+		res.status(500).json({ msg: error.message })
+	}
+})
+
+router.get('/add_product', async (req, res) => {
+	try {
+		const { key, id, data } = req.query
+
+		if (!key || !id || !data) {
+			return res.status(400).json({ msg: 'Information is not provided' })
+		}
+
+		const nguoi_dung = await User.findOne({ key })
+		if (!nguoi_dung) {
+			return res.status(400).json({ msg: 'This user does not exist' })
+		}
+
+		const san_pham = await CategoryProduct.findOne({ number_order: id })
+
+		if (!san_pham) {
+			return res.status(400).json({ msg: 'This product does not exist' })
+		}
+
+		const role = nguoi_dung.role
+		const id_category = san_pham._id
+
+		if (role === 1) {
+			let productSplit = data.trim().split('|')
+			let newData = new Product({
+				id_loaisp: id_category,
+				data: data.trim(),
+				id_fb: productSplit[0],
+			})
+
+			newData.save()
+
+			return res.status(200).json({ msg: 'Add product success' })
+		} else {
+			return res.status(400).json({ msg: 'You are not admin' })
+		}
+	} catch (error) {
+		res.status(500).json({ msg: error.message })
+	}
+})
+
+router.post('/add_muti_product', authKey, async (req, res) => {
+	try {
+		const { id, data } = req.body
+
+		if (!id || !data) {
+			return res.status(400).json({ msg: 'Information is not provided' })
+		}
+
+		const san_pham = await CategoryProduct.findOne({ number_order: id })
+
+		if (!san_pham) {
+			return res.status(400).json({ msg: 'This product does not exist' })
+		}
+
+		const id_category = san_pham._id
+		let newProduct = []
+		data.forEach((value) => {
+			let productSplit = value.trim().split('|')
+			let infor = {
+				id_loaisp: id_category,
+				data: value,
+				id_fb: productSplit[0],
+			}
+			newProduct.push(infor)
+		})
+
+		await Product.insertMany(newProduct)
+
+		// console.log('newProduct: ', newProduct)
+
+		res.status(200).json({ msg: 'Add product success' })
+	} catch (error) {
+		res.status(500).json({ msg: error.message })
 	}
 })
 

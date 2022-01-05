@@ -400,7 +400,9 @@ class Bm extends Component {
 									var name_input_soluongmua =
 										'soluongmua_' + index
 
-									console.log(value)
+									{
+										/* console.log(value) */
+									}
 
 									return (
 										<tr key={index}>
@@ -667,8 +669,8 @@ class Bm extends Component {
 					<h2 style={{ textAlign: 'center' }}>DANH SÁCH TÀI KHOẢN</h2>
 					<p style={{ textAlign: 'center', fontStyle: 'italic' }}>
 						TK24H.COM cung cấp tài khoản quảng cáo Facebook: Tài
-						khoản Doanh nghiệp (BM50, BM350) - Tài khoản Cá nhân
-						(VIA, CLONE) - Mail verify (HOTMAIL, GMAIL)
+						khoản Cá nhân (VIA, CLONE) - Mail verify (HOTMAIL,
+						GMAIL)
 					</p>
 					<div className='card'>
 						<div className='card-header'>

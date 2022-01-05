@@ -17,6 +17,12 @@ const columnAPI = [
 		example: '10',
 		note: 'Số lượng account muốn mua',
 	},
+	{
+		variable: 'DATA',
+		type: 'string',
+		example: 'Test|Test|2FA',
+		note: 'Thông tin account cần thêm',
+	},
 ]
 
 export default columnAPI

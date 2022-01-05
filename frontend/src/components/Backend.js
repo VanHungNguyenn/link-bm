@@ -46,6 +46,7 @@ import AdminLichSuMua from './admin/lichsumua/'
 import AdminLichSuNap from './admin/lichsunaptien/'
 import AdminTongDoanhThu from './admin/tongdoanhthu/'
 import AdminThongBao from './admin/notifi/'
+import GetAPIAdmin from './admin/getAPIAdmin'
 
 import NumberFormat from 'react-number-format'
 import moment from 'moment'
@@ -251,6 +252,26 @@ class Index extends Component {
 				</li>
 				<li className='nav-item'>
 					<NavLink
+						to='/admin/getapi'
+						// activeClassName='active'
+						id='api'
+						className='nav-link text-body-color py-4'
+						// onClick={() => {
+						// 	this.dropdownMenu('')
+						// 	store.dispatch(loadUser())
+						// 	if (isMobile) {
+						// 		this.onClickSidebar(
+						// 			this.props.auth.isOpenSidebar
+						// 		)
+						// 	}
+						// }}
+					>
+						<i className='nav-main-link-icon fas fa-tape text-gray'></i>
+						<span className='d-none d-md-inline ml-1'>API</span>
+					</NavLink>
+				</li>
+				<li className='nav-item'>
+					<NavLink
 						to='/admin/historybuy'
 						// activeClassName='active'
 						className='nav-link text-body-color py-4'
@@ -376,7 +397,7 @@ class Index extends Component {
 				</li>
 				<li className='nav-item'>
 					<NavLink
-						to='/api'
+						to='/getapi'
 						// activeClassName='active'
 						id='api'
 						className='nav-link text-body-color py-4'
@@ -437,7 +458,7 @@ class Index extends Component {
 						</span>
 					</NavLink>
 				</li>
-				<li className='nav-item'>
+				{/* <li className='nav-item'>
 					<NavLink
 						to='/checkbm'
 						// activeClassName='active'
@@ -458,12 +479,12 @@ class Index extends Component {
 							Check BM
 						</span>
 					</NavLink>
-				</li>
-				<li className='nav-item'>
+				</li> */}
+				{/* <li className='nav-item'>
 					<NavLink
 						to='/getotp'
 						// activeClassName='active'
-						id='checkbm'
+						id='getotp'
 						className='nav-link text-body-color py-4'
 						onClick={() => {
 							this.dropdownMenu('')
@@ -480,7 +501,7 @@ class Index extends Component {
 							Lấy mã OTP 2FA
 						</span>
 					</NavLink>
-				</li>
+				</li> */}
 				{/* <li className='nav-item'>
 					<NavLink
 						to='/lichsu'
@@ -764,18 +785,18 @@ class Index extends Component {
 										<TrangChu />
 									</Route>
 								)}
-								{this.state.adminAdtive === false && (
+								{/* {this.state.adminAdtive === false && (
 									<Route exact path='/checkbm'>
 										<CheckBm />
 									</Route>
-								)}
-								{this.state.adminAdtive === false && (
+								)} */}
+								{/* {this.state.adminAdtive === false && (
 									<Route exact path='/getotp'>
 										<GetOtp />
 									</Route>
-								)}
+								)} */}
 								{this.state.adminAdtive === false && (
-									<Route exact path='/api'>
+									<Route exact path='/getapi'>
 										{/* <GetOtp /> */}
 										<GetAPI />
 									</Route>
@@ -832,6 +853,12 @@ class Index extends Component {
 								{this.state.adminAdtive === true &&
 									user.role === 1 && (
 										<Route exact path='/admin/sanphamloi'>
+											<GetAPIAdmin />
+										</Route>
+									)}
+								{this.state.adminAdtive === true &&
+									user.role === 1 && (
+										<Route exact path='/admin/getapi'>
 											<SanPhamLoi />
 										</Route>
 									)}

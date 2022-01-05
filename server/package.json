@@ -20,6 +20,7 @@
 		"config": "^3.2.5",
 		"cron": "^1.8.2",
 		"crypto-js": "^4.0.0",
+		"dotenv": "^10.0.0",
 		"emoji-mart": "^2.11.2",
 		"express": "^4.17.1",
 		"fs": "0.0.1-security",

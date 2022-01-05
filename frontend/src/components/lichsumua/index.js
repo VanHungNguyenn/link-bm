@@ -86,7 +86,7 @@ class LichSuMua extends Component {
 	}
 
 	render() {
-		console.log(this.props.item)
+		// console.log(this.props.item)
 		const { lichsumua, viewProduct } = this.props.item
 		const columns = [
 			{

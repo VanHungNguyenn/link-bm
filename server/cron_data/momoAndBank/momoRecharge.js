@@ -26,7 +26,9 @@ const handleAutoMomoRecharge = async () => {
 				for (let i = 0; i < tranList.length; i++) {
 					const transaction = tranList[i]
 					const tranId = transaction.tranId
-					const comment = transaction.comment.toLowerCase().trim()
+					const comment = transaction.comment
+						? transaction.comment.toLowerCase().trim()
+						: ''
 					const depositMoney = transaction.amount
 					const desc = transaction.desc
 
