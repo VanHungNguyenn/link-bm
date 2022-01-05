@@ -853,13 +853,13 @@ class Index extends Component {
 								{this.state.adminAdtive === true &&
 									user.role === 1 && (
 										<Route exact path='/admin/sanphamloi'>
-											<GetAPIAdmin />
+											<SanPhamLoi />
 										</Route>
 									)}
 								{this.state.adminAdtive === true &&
 									user.role === 1 && (
 										<Route exact path='/admin/getapi'>
-											<SanPhamLoi />
+											<GetAPIAdmin />
 										</Route>
 									)}
 								{this.state.adminAdtive === true &&
